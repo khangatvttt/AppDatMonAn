@@ -1,49 +1,41 @@
 package com.example.projectdatmonan
-
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
+
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
-
-    // Khởi tạo instance của Firestore
-    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Dữ liệu mẫu
-        val user = hashMapOf(
-            "name" to "John Doe",
-            "address" to "123 Main St"
-        )
+        // Firebase Database instance and reference to 'message'
+        val database = FirebaseDatabase.getInstance().getReference("message")
 
-        // Thêm dữ liệu vào collection "users"
-        db.collection("users")
-            .add(user)
-            .addOnSuccessListener { documentReference ->
-                // In ra log khi thêm thành công
-                Log.d("Firestore", "DocumentSnapshot added with ID: ${documentReference.id}")
-
-                // Hiển thị Toast thông báo thành công
-                Toast.makeText(this, "Document added with ID: ${documentReference.id}", Toast.LENGTH_SHORT).show()
+        // Set the value "Hello, World!" to the 'message' node in the database
+        database.setValue("Hungf cho")
+            .addOnSuccessListener {
+                showToast("Message added successfully!")
             }
-            .addOnFailureListener { e ->
-                // In ra log khi thêm thất bại
-                Log.w("Firestore", "Error adding document", e)
-
-                // Hiển thị Toast thông báo lỗi
-                Toast.makeText(this, "Error adding document: $e", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { exception ->
+                showToast("Error adding message: ${exception.message}")
             }
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
     //Khanh Push Thử Nà
     //hahahaa
+=======
+
+    // Extension function to show toast messages
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+>>>>>>> origin/TranVanHung
 }
 =======
 }
