@@ -7,14 +7,14 @@ import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var dvConnection: DBConnection
+    private lateinit var dbConnection: DBConnection
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // Khởi tạo DVConnection
-        dvConnection = DBConnection()
+        dbConnection = DBConnection()
 
         // Tạo một đối tượng NguoiDung
         val nguoiDung = NguoiDung(
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         // Thêm người dùng vào Firebase
-        dvConnection.addNguoiDung(nguoiDung) { success ->
+        dbConnection.addNguoiDung(nguoiDung) { success ->
             if (success) {
                 showToast("Người dùng đã được thêm thành công!")
             } else {
@@ -41,8 +41,5 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    // Extension function to show toast messages
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
+
 }
