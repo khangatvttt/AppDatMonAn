@@ -2,8 +2,8 @@ package com.example.projectdatmonan
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
-import com.google.firebase.database.FirebaseDatabase
+import com.example.projectdatmonan.Database.DBConnection
+import com.example.projectdatmonan.Model.NguoiDung
 
 class MainActivity : AppCompatActivity() {
 
