@@ -51,5 +51,4 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
-    implementation ("org.mongodb:mongodb-driver-core:3.12.10")
 }
