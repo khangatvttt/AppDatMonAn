@@ -1,5 +1,6 @@
-package com.example.projectdatmonan
+package com.example.projectdatmonan.Database
 
+import com.example.projectdatmonan.Model.NguoiDung
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
