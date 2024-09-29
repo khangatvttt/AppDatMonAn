@@ -51,4 +51,6 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
+    implementation ("com.google.firebase:firebase-auth:22.1.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
 }
