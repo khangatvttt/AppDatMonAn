@@ -36,12 +36,29 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Firebase", "Failed to load data: ${error.message}")
+                progressBarFood.visibility = View.GONE
+            }
+        })
     }
-<<<<<<< HEAD
-    //Phi Hùng
-}
-=======
+    // Function to fetch all food items
+    private fun fetchMonAnData() {
+        progressBarPopular.visibility = View.VISIBLE
+        database.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                monAnList.clear()
+                for (monAnSnapshot in snapshot.children) {
+                    val monAn = monAnSnapshot.getValue(MonAn::class.java)
+                    monAn?.let {
+                        monAnList.add(it)
+                        Log.d("MonAnData", "Món ăn: ${it.tenMonAn}, Giá: ${it.gia}, Trạng thái: ${it.trangThai}, Hình ảnh: ${it.hinhAnh}")
+                    }
+                }
+                monAnAdapter.notifyDataSetChanged()
+                progressBarPopular.visibility = View.GONE
+            }
 
     // Hàm để load Fragment
     private fun loadFragment(fragment: Fragment) {
@@ -50,4 +67,3 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 }
->>>>>>> Khang
