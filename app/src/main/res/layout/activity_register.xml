@@ -21,8 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-
-
     <!-- Tiêu đề đăng ký -->
     <TextView
         android:id="@+id/registerTitle"
@@ -44,14 +42,24 @@
         android:layout_height="wrap_content"
         android:hint="Full Name"
         android:padding="12dp"
-
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="#A0A0A0"
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@id/registerTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/fullNameErrorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+    app:layout_constraintTop_toBottomOf="@id/fullNameEditText"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="4dp"/>
 
     <!-- Số điện thoại -->
     <EditText
@@ -60,14 +68,24 @@
         android:layout_height="wrap_content"
         android:hint="Phone Number"
         android:padding="12dp"
-
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="#A0A0A0"
         android:inputType="phone"
-        app:layout_constraintTop_toBottomOf="@id/fullNameEditText"
+        app:layout_constraintTop_toBottomOf="@id/fullNameErrorText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/phoneErrorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+    app:layout_constraintTop_toBottomOf="@id/phoneEditText"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="4dp"/>
 
     <!-- Email -->
     <EditText
@@ -76,14 +94,24 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         android:padding="12dp"
-
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="#A0A0A0"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@id/phoneEditText"
+        app:layout_constraintTop_toBottomOf="@id/phoneErrorText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/emailErrorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+    app:layout_constraintTop_toBottomOf="@id/emailEditText"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="4dp"/>
 
     <!-- Mật khẩu -->
     <EditText
@@ -92,14 +120,24 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:padding="12dp"
-
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="#A0A0A0"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/emailEditText"
+        app:layout_constraintTop_toBottomOf="@id/emailErrorText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/passwordErrorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+    app:layout_constraintTop_toBottomOf="@id/passwordEditText"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="4dp"/>
 
     <!-- Địa chỉ -->
     <EditText
@@ -108,14 +146,24 @@
         android:layout_height="wrap_content"
         android:hint="Address"
         android:padding="12dp"
-
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textColorHint="#A0A0A0"
         android:inputType="textPostalAddress"
-        app:layout_constraintTop_toBottomOf="@id/passwordEditText"
+        app:layout_constraintTop_toBottomOf="@id/passwordErrorText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:id="@+id/addressErrorText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+    app:layout_constraintTop_toBottomOf="@id/addressEditText"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="4dp"/>
 
     <!-- Nút Đăng ký -->
     <Button
@@ -129,7 +177,7 @@
         android:elevation="4dp"
         android:padding="14dp"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/addressEditText"
+        app:layout_constraintTop_toBottomOf="@id/addressErrorText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"/>
