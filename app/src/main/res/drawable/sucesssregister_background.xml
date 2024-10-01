@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap
+            android:src="@drawable/bgresgistersucess"
+            android:scaleType="centerCrop"/>
+    </item>
+    <item>
+        <color android:color="#80000000"/> <!-- Lớp phủ màu đen mờ để làm rõ form -->
+    </item>
+</layer-list>

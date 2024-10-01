@@ -8,23 +8,7 @@ class DBConnection {
 
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    // Thêm người dùng vào Firebase
-    fun addNguoiDung(nguoiDung: NguoiDung, onComplete: (Boolean) -> Unit) {
-        val newUserId = database.child("NguoiDung").push().key // Tạo ID ngẫu nhiên
-        if (newUserId != null) {
-            database.child("NguoiDung").child(newUserId).setValue(nguoiDung)
-                .addOnSuccessListener {
-                    onComplete(true) // Thêm thành công
-                }
-                .addOnFailureListener { exception ->
-                    println("Error adding user: ${exception.message}")
-                    onComplete(false) // Thêm thất bại
-                }
-        } else {
-            println("Error generating user ID")
-            onComplete(false)
-        }
-    }
+
 
 
     // Lấy thông tin người dùng theo ID
