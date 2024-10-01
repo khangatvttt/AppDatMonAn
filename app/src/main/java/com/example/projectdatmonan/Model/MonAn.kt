@@ -6,5 +6,6 @@ data class MonAn(
     var trangThai: String? = null,
     var moTaChiTiet: String? = null,
     var trangThaiGiamGia: Int? = null,
-    var hinhAnh: List<String>? = null
+    var hinhAnh: List<String>? = null,
+    var loaiMonAn: String? = null
 )
