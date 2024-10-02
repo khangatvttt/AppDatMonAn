@@ -1,8 +1,11 @@
 package com.example.projectdatmonan.Database
 
 import com.example.projectdatmonan.Model.MonAn
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.tasks.await
 
 class CRUD_MonAn {
@@ -25,6 +28,29 @@ class CRUD_MonAn {
         }
     }
 
+    fun getMonAnTheoLoai(maLoai:String, onComplete: (HashMap<String?,MonAn?>?) -> Unit){
+        val database = FirebaseDatabase.getInstance()
+        val monAnRef: DatabaseReference = database.getReference("MonAn")
+        val listMonAn:HashMap<String?,MonAn?> = HashMap<String?,MonAn?>()
+
+        monAnRef.orderByChild("loaiMonAn").equalTo(maLoai).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (monAnSnapshot in dataSnapshot.children) {
+                    val monAn = monAnSnapshot.getValue(MonAn::class.java)
+                    listMonAn[monAnSnapshot.key] = monAn
+
+                }
+                onComplete(listMonAn)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle any errors
+                println("Error: ${error.message}")
+                onComplete(null)
+
+            }
+        })
+    }
 
     fun getAllMonAn(onComplete: (HashMap<String?,MonAn?>?) -> Unit) {
         val database = FirebaseDatabase.getInstance()
