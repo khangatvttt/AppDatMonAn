@@ -5,28 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.projectdatmonan.Database.CRUD_MonAn
+import com.example.projectdatmonan.Model.MonAn
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FragmentQuanLyMonAn.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FragmentQuanLyMonAn : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var recyclerView: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -37,16 +29,39 @@ class FragmentQuanLyMonAn : Fragment() {
         return inflater.inflate(R.layout.fragment_quan_ly_mon_an, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        recyclerView = getView()?.findViewById(R.id.recyclerViewMonAn)
+        val progressBar: ProgressBar? = getView()?.findViewById(R.id.progressBarMonAn)
+        if (progressBar != null) {
+            progressBar.visibility = View.VISIBLE
+        }
+        val loaiMonAnID = arguments?.getString("LoaiMonAnID")
+        val db = CRUD_MonAn()
+
+        if (loaiMonAnID != null) {
+            if (loaiMonAnID=="All") {
+                db.getAllMonAn { list ->
+                    recyclerView?.layoutManager = LinearLayoutManager(this.context)
+                    recyclerView?.adapter = list?.let { MonAnAdminAdapter(it) }
+                    if (progressBar != null) {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+            }
+            else {
+                db.getMonAnTheoLoai(loaiMonAnID){list->
+                    recyclerView?.layoutManager = LinearLayoutManager(this.context)
+                    recyclerView?.adapter = list?.let { MonAnAdminAdapter(it) }
+                    if (progressBar != null) {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentQuanLyMonAn.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             FragmentQuanLyMonAn().apply {
