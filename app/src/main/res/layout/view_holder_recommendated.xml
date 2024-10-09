@@ -1,77 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
 
     <ImageView
         android:id="@+id/image_food"
-        android:layout_width="164dp"
-        android:layout_height="164dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/food_image"
         tools:ignore="MissingConstraints" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/image_food"
-        app:layout_constraintTop_toTopOf="@+id/image_food"
-        app:srcCompat="@drawable/btn_3"
-        app:tint="@color/grey"/>
-
     <TextView
-        android:id="@+id/text_food_name"
-        android:layout_width="wrap_content"
+        android:id="@+id/textFoodName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Food Name"
-        android:textSize="16sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:ellipsize="end"
         android:singleLine="true"
-        app:layout_constraintTop_toBottomOf="@id/image_food"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toEndOf="@id/image_food"
+        app:layout_constraintTop_toTopOf="@id/image_food"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0" />
 
     <TextView
-        android:id="@+id/text_food_price"
-        android:layout_width="wrap_content"
+        android:id="@+id/textFoodPrice"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="$0.00"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/text_food_name"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@id/image_food"
+        app:layout_constraintTop_toBottomOf="@id/textFoodName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0" />
+
     <TextView
-        android:id="@+id/text_food_availability"
-        android:layout_width="wrap_content"
+        android:id="@+id/textFoodDiscount"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Available"
-        android:textSize="14sp"
-        android:textColor="@android:color/holo_green_dark"
-        app:layout_constraintTop_toBottomOf="@+id/text_food_name"
-        app:layout_constraintStart_toEndOf="@id/text_food_price"
-        app:layout_constraintEnd_toEndOf="parent" />
-    <TextView
-        android:id="@+id/text_food_discount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:text="$0.00"
-        android:textSize="14sp"
+        android:textSize="20sp"
         android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintTop_toBottomOf="@id/text_food_availability"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@id/image_food"
+        app:layout_constraintTop_toBottomOf="@id/textFoodPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0" />
+    <TextView
+        android:id="@+id/textFoodAvailability"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Available"
+        android:textSize="18sp"
+        android:textColor="@android:color/holo_green_dark"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@id/image_food"
+        app:layout_constraintTop_toBottomOf="@id/textFoodDiscount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0" />
+
+    <TextView
+        android:id="@+id/txt_sosao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.913"
+        android:textSize="18dp"
+        android:text="Số sao"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_star"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/star" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

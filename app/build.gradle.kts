@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-
+    implementation ("com.google.code.gson:gson:2.8.9")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation ("org.mongodb:mongodb-driver-sync:4.7.2")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -52,6 +52,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

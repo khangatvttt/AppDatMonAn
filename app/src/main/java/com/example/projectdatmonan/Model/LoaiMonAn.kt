@@ -1,7 +1,6 @@
 package com.example.projectdatmonan.Model
 
 data class LoaiMonAn(
-    val id:Int=0,
-    val title:String="",
-    val picUrl:String=""
+    val tenMonAn:String?=null,
+    val hinhAnh:String?=null
 )
