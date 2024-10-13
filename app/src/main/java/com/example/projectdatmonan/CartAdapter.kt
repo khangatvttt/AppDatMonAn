@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.projectdatmonan.Database.CRUD_GioHang
 import com.example.projectdatmonan.Model.ListMonAn
 import com.example.projectdatmonan.databinding.ViewHolderCartBinding
 import com.google.firebase.database.DataSnapshot
@@ -22,6 +23,8 @@ class CartAdapter(
     private val onItemClicked: (ListMonAn) -> Unit,
     private val onQuantityChanged: () -> Unit
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+
+    private val crudGioHang = CRUD_GioHang()
 
     inner class CartViewHolder(private val binding: ViewHolderCartBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -44,26 +47,41 @@ class CartAdapter(
 
             binding.btnPlusCart.setOnClickListener {
                 item.soLuong = (item.soLuong ?: 0) + 1
-                updateQuantityInDatabase(item)
-                notifyItemChanged(adapterPosition)
-                onQuantityChanged()
+                crudGioHang.updateQuantityInDatabase(maNguoiDung, item, {
+                    notifyItemChanged(adapterPosition)
+                    onQuantityChanged()
+                }, { error ->
+                    Log.e("Firebase", "Failed to update quantity", error)
+                })
             }
 
             binding.btnMinusCart.setOnClickListener {
                 if ((item.soLuong ?: 0) > 1) {
                     item.soLuong = (item.soLuong ?: 0) - 1
-                    updateQuantityInDatabase(item)
-                    notifyItemChanged(adapterPosition)
-                    onQuantityChanged()
+                    crudGioHang.updateQuantityInDatabase(maNguoiDung, item, {
+                        notifyItemChanged(adapterPosition)
+                        onQuantityChanged()
+                    }, { error ->
+                        Log.e("Firebase", "Failed to update quantity", error)
+                    })
                 } else if ((item.soLuong ?: 0) == 1) {
-                    removeItemFromCart(item)
-                    onQuantityChanged()
+                    crudGioHang.removeItemFromCart(maNguoiDung, item, {
+                        cartItems = cartItems.filter { it.maMonAn != item.maMonAn }
+                        notifyDataSetChanged()
+                        onQuantityChanged()
+                    }, { error ->
+                        Log.e("Firebase", "Failed to remove item from cart", error)
+                    })
                 }
             }
             binding.btnDeleteCart.setOnClickListener{
-                removeItemFromCart(item)
-                notifyItemChanged(adapterPosition)
-                onQuantityChanged()
+                crudGioHang.removeItemFromCart(maNguoiDung, item, {
+                    cartItems = cartItems.filter { it.maMonAn != item.maMonAn }
+                    notifyDataSetChanged()
+                    onQuantityChanged()
+                }, { error ->
+                    Log.e("Firebase", "Failed to remove item from cart", error)
+                })
             }
 
             itemView.setOnClickListener {
@@ -71,47 +89,6 @@ class CartAdapter(
             }
         }
 
-        private fun updateQuantityInDatabase(item: ListMonAn) {
-            val cartRef = FirebaseDatabase.getInstance().getReference("GioHang")
-            cartRef.orderByChild("maNguoiDung").equalTo(maNguoiDung).addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        for (cartSnapshot in snapshot.children) {
-                            val listMonAnRef = cartSnapshot.child("listMonAn").ref
-                            listMonAnRef.orderByChild("maMonAn").equalTo(item.maMonAn).addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(itemSnapshot: DataSnapshot) {
-                                    if (itemSnapshot.exists()) {
-                                        for (itemRef in itemSnapshot.children) {
-                                            itemRef.ref.child("soLuong").setValue(item.soLuong)
-                                                .addOnSuccessListener {
-                                                    Log.d("Firebase", "Quantity updated successfully for user $maNguoiDung")
-                                                    (itemView.context as? CartFragment)?.updateTotal()
-                                                }
-                                                .addOnFailureListener { error ->
-                                                    Log.e("Firebase", "Failed to update quantity for user $maNguoiDung", error)
-                                                }
-                                        }
-                                    } else {
-                                        Log.d("Firebase", "Item not found for maMonAn: ${item.maMonAn}")
-                                    }
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                    Log.e("Firebase", "Error querying cart items: ${error.message}")
-                                }
-                            })
-                        }
-                    } else {
-                        Log.d("Firebase", "No cart found for user: $maNguoiDung")
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("Firebase", "Error fetching user cart: ${error.message}")
-                }
-            })
-        }
 
         private fun removeItemFromCart(item: ListMonAn) {
             val cartRef = FirebaseDatabase.getInstance().getReference("GioHang")

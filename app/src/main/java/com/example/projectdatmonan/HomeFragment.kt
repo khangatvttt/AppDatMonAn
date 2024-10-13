@@ -20,7 +20,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.projectdatmonan.Model.DanhGia
+import com.example.projectdatmonan.Database.CRUD_DanhGia
+import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
+import com.example.projectdatmonan.Database.CRUD_MonAn
 import com.example.projectdatmonan.Model.LoaiMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.google.firebase.database.*
@@ -44,6 +46,10 @@ class HomeFragment : Fragment() {
     private var selectedCategoryName: String? = null
     private val _category = MutableLiveData<List<LoaiMonAn>>()
     private val categoryIdMap = mutableMapOf<String, String>()
+    private val crudMonAn = CRUD_MonAn()
+    private val crudLoaiMonAn = CRUD_LoaiMonAn()
+    private val crudDanhGia = CRUD_DanhGia()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -142,58 +148,50 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadCategory() {
-        val ref = FirebaseDatabase.getInstance().getReference().child("LoaiMonAn")
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val lists = mutableListOf<LoaiMonAn>()
-                for (childSnapshot in snapshot.children) {
-                    val list = childSnapshot.getValue(LoaiMonAn::class.java)
-                    val key = childSnapshot.key
-                    if (list != null && key != "All") {
-                        lists.add(list)
-                        categoryIdMap[list.tenMonAn ?: ""] = key ?: ""
-                        Log.d("Key", key.toString())
-                    }
-                }
-                _category.value = lists
+        progressBarFood.visibility = View.VISIBLE
 
-                if (lists.isNotEmpty()) {
-                    val firstCategoryId = categoryIdMap[lists[0].tenMonAn]
+        crudLoaiMonAn.loadCategory(
+            onComplete = { categories, idMap ->
+                _category.value = categories
+                categoryIdMap.putAll(idMap)
+
+                if (categories.isNotEmpty()) {
+                    val firstCategoryId = categoryIdMap[categories[0].tenMonAn]
                     filterMonAnByCategory(firstCategoryId)
                 }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("Firebase", "Failed to load data: ${error.message}")
+            },
+            onError = { errorMessage ->
+                Log.e("Firebase", errorMessage)
                 progressBarFood.visibility = View.GONE
             }
-        })
+        )
     }
 
     private fun fetchMonAnData() {
         progressBarPopular.visibility = View.VISIBLE
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        crudMonAn.fetchMonAnData(
+            onDataFetched = { data ->
                 monAnList.clear()
-                for (monAnSnapshot in snapshot.children) {
-                    val monAn = monAnSnapshot.getValue(MonAn::class.java)
-                    val monAnId = monAnSnapshot.key // Lấy ID của món ăn
-                    monAn?.let {
-                        monAnList.add(it)
-                        monAnAdapter.addMonAnWithId(monAnId, it)
-                        Log.d("MonAnList", "Thêm món ăn: ${it.tenMonAn}")
-                        fetchDanhGia(monAnSnapshot.key ?: "", it)
-                    }
-                }
-                monAnAdapter.updateList(monAnList)
+                for ((monAnId, monAn) in data) {
+                    monAnList.add(monAn)
+                    monAnAdapter.addMonAnWithId(monAnId, monAn)
+                    crudDanhGia.fetchDanhGia(
+                        monAnId,
+                        onComplete = { ratings ->
+                            updateAverageRating(ratings, monAn)
+                        },
+                        onError = { error ->
+                            Log.e("Firebase", "Failed to read data: ${error.message}", error.toException())
+                        }
+                    )                }
+                monAnAdapter.notifyDataSetChanged()
                 progressBarPopular.visibility = View.GONE
-            }
-
-            override fun onCancelled(error: DatabaseError) {
+            },
+            onError = { error ->
                 Log.e("Firebase", "Failed to read data", error.toException())
                 progressBarPopular.visibility = View.GONE
             }
-        })
+        )
     }
 
     private fun filterMonAnByCategory(categoryId: String?) {
@@ -202,28 +200,6 @@ class HomeFragment : Fragment() {
             monAn.loaiMonAn?.equals(categoryId, ignoreCase = true) == true
         }
         monAnAdapter.updateList(filteredList)
-    }
-
-    private fun fetchDanhGia(monAnId: String, monAn: MonAn) {
-        Log.d("Món ăn id",monAnId)
-        val ref = FirebaseDatabase.getInstance().getReference("DanhGia").orderByChild("maMonAn").equalTo(monAnId)
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("DanhGia", "Số lượng đánh giá: ${snapshot.childrenCount}")
-                val ratings = mutableListOf<Int>()
-                for (childSnapshot in snapshot.children) {
-                    val danhGia = childSnapshot.getValue(DanhGia::class.java)
-                    danhGia?.soSao?.let { ratings.add(it)
-
-                    }
-                }
-                updateAverageRating(ratings, monAn)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("Firebase", "Failed to read data: ${error.message}", error.toException())
-            }
-        })
     }
 
     private fun updateAverageRating(ratings: List<Int>, monAn: MonAn) {

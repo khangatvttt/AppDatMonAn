@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
+import com.example.projectdatmonan.Database.CRUD_DatHang
 import com.example.projectdatmonan.Model.DatHang
 import com.example.projectdatmonan.Model.GioHang
 import com.example.projectdatmonan.Model.ListMonAn
@@ -29,6 +30,8 @@ class dialog_thanhtoan : DialogFragment() {
     private lateinit var edtAddress: EditText
     private val items = mutableListOf<String>()
     private val listMonAn = mutableListOf<ListMonAn>()
+    private var tongTien = 0.0
+    private val crudDatHang = CRUD_DatHang()
 
     private lateinit var listener: OrderListener
 
@@ -55,6 +58,7 @@ class dialog_thanhtoan : DialogFragment() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         edtName = view.findViewById(R.id.edtName)
@@ -116,7 +120,6 @@ class dialog_thanhtoan : DialogFragment() {
                     }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.e("Firebase", "Failed to read data", error.toException())
             }
@@ -129,9 +132,15 @@ class dialog_thanhtoan : DialogFragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val monAn = snapshot.getValue(MonAn::class.java)
                 if (monAn != null) {
-                    val itemName = "- ${monAn.tenMonAn} (${monAn.gia} VND) - Số lượng: $soLuong"
+                    val giaGiam = monAn.gia?.let {
+                        it * (100 - (monAn.trangThaiGiamGia ?: 0)) / 100
+                    } ?: 0.0
+                    val itemName = "- ${monAn.tenMonAn} (${giaGiam} VND) - Số lượng: $soLuong"
                     items.add(itemName)
                     listMonAn.add(ListMonAn(maMonAn, soLuong))
+                    val gia = monAn.gia ?: 0.0
+                    val giamGia = monAn.trangThaiGiamGia ?: 0
+                    tongTien += (gia*(100-giamGia)/100) * soLuong
                     updateCartSummary(items)
                 }
             }
@@ -149,46 +158,18 @@ class dialog_thanhtoan : DialogFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun placeOrder() {
-        val orderId = FirebaseDatabase.getInstance().getReference("DatHang").push().key
-
         val diaChiGiaoHang = edtAddress.text.toString()
         val sdt = edtPhoneNumber.text.toString()
 
-        val datHang = DatHang(
-            maNguoiDung = maNguoiDung,
-            listMonAn = listMonAn,
-            ngayGioDat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-            tinhTrang = "Đang xử lý",
-            diaChiGiaoHang = diaChiGiaoHang,
-            sdt = sdt
-        )
-
-        orderId?.let {
-            FirebaseDatabase.getInstance().getReference("DatHang").child(it).setValue(datHang)
-                .addOnSuccessListener {
-                    clearCart(maNguoiDung)
-                    listener.onOrderPlaced() // Gọi callback
-                    dismiss()
-                }
-                .addOnFailureListener { e ->
-                    Log.e("Firebase", "Failed to add order", e)
-                }
-        }
-    }
-
-    private fun clearCart(maNguoiDung: String) {
-        val cartRef = FirebaseDatabase.getInstance().getReference("GioHang")
-
-        cartRef.orderByChild("maNguoiDung").equalTo(maNguoiDung).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (cartSnapshot in snapshot.children) {
-                    cartSnapshot.ref.removeValue()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("Firebase", "Failed to clear cart", error.toException())
-            }
+        crudDatHang.placeOrder(maNguoiDung, listMonAn, diaChiGiaoHang, sdt, tongTien, {
+            crudDatHang.clearCart(maNguoiDung, {
+                listener.onOrderPlaced()
+                dismiss()
+            }, { error ->
+                Log.e("Firebase", "Failed to clear cart", error)
+            })
+        }, { error ->
+            Log.e("Firebase", "Failed to place order", error)
         })
     }
 }

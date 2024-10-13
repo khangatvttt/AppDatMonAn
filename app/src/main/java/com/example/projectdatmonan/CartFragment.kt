@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.projectdatmonan.Database.CRUD_GioHang
 import com.example.projectdatmonan.Model.GioHang
 import com.example.projectdatmonan.Model.ListMonAn
 import com.example.projectdatmonan.Model.MonAn
@@ -27,6 +28,7 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
     private val dishImages = mutableMapOf<String, String?>()
     private val maNguoiDung = "user01"
     private lateinit var txtTotal: TextView
+    private val crudGioHang = CRUD_GioHang()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,33 +59,21 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
         }
     }
 
-    fun fetchCartData() {
-        val cartRef = FirebaseDatabase.getInstance().getReference("GioHang")
-
-        cartRef.orderByChild("maNguoiDung").equalTo(maNguoiDung).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val cartItems = mutableListOf<ListMonAn>()
-                for (cartSnapshot in snapshot.children) {
-                    val gioHang = cartSnapshot.getValue(GioHang::class.java)
-                    gioHang?.let {
-                        it.listMonAn?.let { items -> cartItems.addAll(items) }
-                    }
-                }
-                if (cartItems.isEmpty()) {
-                    binding.txtEmpty.visibility = View.VISIBLE
-                    binding.viewCart.visibility = View.GONE
-                    binding.button2.isEnabled = false
-                } else {
-                    binding.txtEmpty.visibility = View.GONE
-                    binding.viewCart.visibility = View.VISIBLE
-                    binding.button2.isEnabled = true
-                    fetchDishDetails(cartItems)
-                }
+    private fun fetchCartData() {
+        crudGioHang.fetchCartData(maNguoiDung, { cartItems ->
+            if (cartItems.isEmpty()) {
+                binding.txtEmpty.visibility = View.VISIBLE
+                binding.viewCart.visibility = View.GONE
+                binding.button2.isEnabled = false
+            } else {
+                binding.txtEmpty.visibility = View.GONE
+                binding.viewCart.visibility = View.VISIBLE
+                binding.button2.isEnabled = true
+                fetchDishDetails(cartItems)
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("Firebase", "Failed to read data", error.toException())
-            }
+            updateTotal()
+        }, { error ->
+            Log.e("Firebase", "Failed to read data", error.toException())
         })
     }
 
@@ -99,7 +89,9 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
                         val monAn = snapshot.getValue(MonAn::class.java)
                         if (monAn != null) {
                             dishNames[maMonAn] = monAn.tenMonAn
-                            dishPrices[maMonAn] = monAn.gia
+                            val gia = monAn.gia ?: 0.0
+                            val giamGia = monAn.trangThaiGiamGia ?: 0
+                            dishPrices[maMonAn] = gia * (100 - giamGia) / 100
                             monAn.hinhAnh?.firstOrNull()?.let { imagePath ->
                                 val storageRef = FirebaseStorage.getInstance().getReference(imagePath)
                                 storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
