@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         // Đặt Fragment mặc định (ví dụ: HomeFragment)
-        loadFragment(HomeFragment())
+        loadFragment(DuyetDonFragment())
 
         bottomNav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {

@@ -47,10 +47,14 @@ dependencies {
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.7.10")
     implementation ("com.google.firebase:firebase-auth:22.1.1")
     implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
+    implementation ("com.google.firebase:firebase-storage:20.1.1")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+
 }
