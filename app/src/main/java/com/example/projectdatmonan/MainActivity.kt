@@ -2,55 +2,97 @@ package com.example.projectdatmonan
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.projectdatmonan.Database.CRUD_GioHang
-import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
-import com.example.projectdatmonan.Model.GioHang
-import com.example.projectdatmonan.Model.ListMonAn
-import com.example.projectdatmonan.Model.LoaiMonAn
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.projectdatdatHang.Database.CRUD_DatHang
+import com.example.projectdatmonan.Database.CRUD_DanhGia
+import com.example.projectdatmonan.Database.CRUD_MonAn
+import com.example.projectdatmonan.Database.DBConnection
+import com.example.projectdatmonan.Model.MonAn
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
 
+    lateinit var bottomNav: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.quan_ly_mon_an)
 
-        val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        loadFragment(HomeFragment())
+//        val button: Button = findViewById(R.id.buttonTest)
+//
+//        button.setOnClickListener {
+//            val tv: TextView = findViewById(R.id.textViewShow)
+//            val db = CRUD_DatHang()
+////            val monAn = MonAn(
+////                tenMonAn = "Súp cua",
+////                gia = 30000.0,
+////                trangThai = "Còn hàng",
+////                moTaChiTiet = "Súp và cua",
+////                trangThaiGiamGia = 32,
+////                hinhAnh = listOf("pho_bo_1.jpg", "pho_bo_2.jpg"),
+////                loaiMonAn = "-O86Xz9VZWTIVdVRcuyy"
+////            )
+//            Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show()
+//            db.getMonAnDaBan(3) { list ->
+//                if (list != null) {
+//                    tv.setText(list.toString())
+//                }
+//            }
+//        }
 
+        loadFragment(FragmentQuanLyLoaiMonAn())
+        bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNav.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.qlMonAn -> {
+                    loadFragment(FragmentQuanLyLoaiMonAn())
+                    true
+                }
 
-        bottomNav.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    loadFragment(HomeFragment())
+                R.id.ThongKe -> {
+                    loadFragment(FragmentThongKe())
                     true
                 }
-                R.id.nav_cart -> {
-                    loadFragment(CartFragment())
+
+                R.id.DonHang -> {
+                    loadFragment(FragmentQuanLyMonAn())
                     true
                 }
-                R.id.nav_history -> {
-                    loadFragment(HistoryFragment())
+
+                R.id.Feedback -> {
+                    loadFragment(FragmentXemDanhGia())
                     true
                 }
-                R.id.nav_profile -> {
-                    loadFragment(ProfileFragment())
+                else -> {
+                    loadFragment(FragmentQuanLyMonAn())
                     true
                 }
-                else -> false
             }
         }
     }
 
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
+        transaction.replace(R.id.container, fragment)
         transaction.commit()
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
