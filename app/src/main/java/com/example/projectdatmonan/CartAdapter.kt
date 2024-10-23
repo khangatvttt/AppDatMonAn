@@ -88,51 +88,6 @@ class CartAdapter(
                 onItemClicked(item)
             }
         }
-
-
-        private fun removeItemFromCart(item: ListMonAn) {
-            val cartRef = FirebaseDatabase.getInstance().getReference("GioHang")
-            cartRef.orderByChild("maNguoiDung").equalTo(maNguoiDung).addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        for (cartSnapshot in snapshot.children) {
-                            val listMonAnRef = cartSnapshot.child("listMonAn").ref
-                            listMonAnRef.orderByChild("maMonAn").equalTo(item.maMonAn).addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(itemSnapshot: DataSnapshot) {
-                                    if (itemSnapshot.exists()) {
-                                        for (itemRef in itemSnapshot.children) {
-                                            itemRef.ref.removeValue()
-                                                .addOnSuccessListener {
-                                                    Log.d("Firebase", "Item removed successfully from cart for user $maNguoiDung")
-                                                    cartItems = cartItems.filter { it.maMonAn != item.maMonAn }
-                                                    notifyDataSetChanged()
-                                                    (itemView.context as? CartFragment)?.updateTotal()
-                                                }
-                                                .addOnFailureListener { error ->
-                                                    Log.e("Firebase", "Failed to remove item from cart for user $maNguoiDung", error)
-                                                }
-                                        }
-                                    } else {
-                                        Log.d("Firebase", "Item not found for maMonAn: ${item.maMonAn}")
-                                    }
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                    Log.e("Firebase", "Error querying cart items: ${error.message}")
-                                }
-                            })
-                        }
-                    } else {
-                        Log.d("Firebase", "No cart found for user: $maNguoiDung")
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("Firebase", "Error fetching user cart: ${error.message}")
-                }
-            })
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {

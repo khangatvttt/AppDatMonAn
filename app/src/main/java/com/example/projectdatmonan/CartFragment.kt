@@ -43,8 +43,8 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
             checkoutDialog.show(requireActivity().supportFragmentManager, "CheckoutDialog")
         }
 
-        setupRecyclerView()
         fetchCartData()
+        setupRecyclerView()
 
         return binding.root
     }

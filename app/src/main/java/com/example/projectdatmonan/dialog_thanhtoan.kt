@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
@@ -158,12 +159,27 @@ class dialog_thanhtoan : DialogFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun placeOrder() {
-        val diaChiGiaoHang = edtAddress.text.toString()
-        val sdt = edtPhoneNumber.text.toString()
+        val name = edtName.text.toString().trim()
+        val diaChiGiaoHang = edtAddress.text.toString().trim()
+        val sdt = edtPhoneNumber.text.toString().trim()
+
+        if (name.isEmpty() || diaChiGiaoHang.isEmpty() || sdt.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "Vui lòng nhập đầy đủ thông tin",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
 
         crudDatHang.placeOrder(maNguoiDung, listMonAn, diaChiGiaoHang, sdt, tongTien, {
             crudDatHang.clearCart(maNguoiDung, {
                 listener.onOrderPlaced()
+                Toast.makeText(
+                    requireContext(),
+                    "Đặt hàng thành công! Đơn hàng của bạn sẽ được giao trong thời gian sớm nhất",
+                    Toast.LENGTH_LONG
+                ).show()
                 dismiss()
             }, { error ->
                 Log.e("Firebase", "Failed to clear cart", error)

@@ -43,6 +43,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewPager: ViewPager2
     private lateinit var dotsIndicator: DotsIndicator
     private lateinit var sliderAdapter: SliderAdapter
+    private lateinit var noFoodTextView: TextView
     private var selectedCategoryName: String? = null
     private val _category = MutableLiveData<List<LoaiMonAn>>()
     private val categoryIdMap = mutableMapOf<String, String>()
@@ -62,7 +63,7 @@ class HomeFragment : Fragment() {
         viewPopular.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val searchEditText = view.findViewById<EditText>(R.id.searchEditText)
         val searchIcon = view.findViewById<ImageView>(R.id.imageView2)
-
+        noFoodTextView = view.findViewById(R.id.txt_noFood)
         searchIcon.setOnClickListener {
             selectedCategoryName = null
             loaiMonAnAdapter.clearSelection()
@@ -144,7 +145,15 @@ class HomeFragment : Fragment() {
         val filteredList = monAnList.filter { monAn ->
             monAn.tenMonAn?.contains(query, ignoreCase = true) == true
         }
-        monAnAdapter.updateList(filteredList)
+        if (filteredList.isEmpty()) {
+            noFoodTextView.setText("Không tìm thấy món ăn phù hợp với tìm kiếm của bạn")
+            noFoodTextView.visibility = View.VISIBLE
+            viewPopular.visibility = View.GONE
+        } else {
+            noFoodTextView.visibility = View.GONE
+            viewPopular.visibility = View.VISIBLE
+            monAnAdapter.updateList(filteredList)
+        }
     }
 
     private fun loadCategory() {
@@ -199,7 +208,14 @@ class HomeFragment : Fragment() {
         val filteredList = monAnList.filter { monAn ->
             monAn.loaiMonAn?.equals(categoryId, ignoreCase = true) == true
         }
-        monAnAdapter.updateList(filteredList)
+        if (filteredList.isEmpty()) {
+            noFoodTextView.visibility = View.VISIBLE
+            viewPopular.visibility = View.GONE
+        } else {
+            noFoodTextView.visibility = View.GONE
+            viewPopular.visibility = View.VISIBLE
+            monAnAdapter.updateList(filteredList)
+        }
     }
 
     private fun updateAverageRating(ratings: List<Int>, monAn: MonAn) {

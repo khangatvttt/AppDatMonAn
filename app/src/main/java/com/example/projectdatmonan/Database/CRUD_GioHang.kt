@@ -28,6 +28,7 @@ class CRUD_GioHang {
             onComplete(false)
         }
     }
+
     fun fetchCartData(maNguoiDung: String, onComplete: (List<ListMonAn>) -> Unit, onError: (DatabaseError) -> Unit) {
         val cartRef = FirebaseDatabase.getInstance().getReference("GioHang")
 
