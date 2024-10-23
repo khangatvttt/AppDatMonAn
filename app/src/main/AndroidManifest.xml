@@ -15,12 +15,7 @@
         android:theme="@style/Theme.ProjectDatMonAn"
         tools:targetApi="31">
         <activity
-<<<<<<< HEAD
             android:name=".MainActivity"
-
-=======
-            android:name=".LoginActivity"
->>>>>>> origin/TranVanHung
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,14 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
         <activity android:name=".ThemSPVaoGioHangActivity" />
+        <activity android:name=".ChiTietMonAnActivity" />
         <activity android:name=".GioHangActivity" />
-=======
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+
         <activity
             android:name=".RegisterActivity"
             android:exported="true">
@@ -64,7 +55,6 @@
             android:name=".CartFragment"
             android:exported="true">
         </activity>
->>>>>>> origin/TranVanHung
     </application>
 
 </manifest>

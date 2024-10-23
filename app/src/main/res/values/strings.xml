@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ProjectDatMonAn</string>
+    <string-array name="payment_methods">
+        <item>Tiền mặt</item>
+        <item>Thẻ tín dụng</item>
+        <item>Chuyển khoản ngân hàng</item>
+    </string-array>
+    <string name="underlined_text">Viết đánh giá của bạn</string>
+
 </resources>
