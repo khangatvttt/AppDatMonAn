@@ -89,6 +89,21 @@ class CRUD_MonAn {
             }
     }
 
+    fun getMonAn(maMonAn:String, onComplete: (MonAn?) -> Unit) {
+        val database = FirebaseDatabase.getInstance()
+        val monAnRef = database.getReference("MonAn").child(maMonAn)
+
+        // Query to find the GioHang node by maNguoiDung
+        monAnRef.get()
+            .addOnSuccessListener { dataSnapshot ->
+                val monAn = dataSnapshot.getValue(MonAn::class.java)
+                onComplete(monAn)
+            }
+            .addOnFailureListener { exception ->
+                onComplete(null)
+            }
+    }
+
     fun deleteMonAn(maMonAn: String, onComplete: (Boolean) -> Unit) {
         val database = FirebaseDatabase.getInstance().getReference("MonAn")
         // Xóa món ăn theo ID

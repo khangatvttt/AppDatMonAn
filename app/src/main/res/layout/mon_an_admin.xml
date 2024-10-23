@@ -36,7 +36,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="-5dp"
             android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@+id/imageButton"
             android:paddingTop="8dp"
             android:text="Food Name"
             android:textColor="#732828"

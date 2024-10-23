@@ -32,5 +32,12 @@
                 android:layout_gravity="center"/>
         </FrameLayout>
     </LinearLayout>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addMonAnBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="ok"
+        android:src="@drawable/plus_large_svgrepo_com"/>
 </FrameLayout>

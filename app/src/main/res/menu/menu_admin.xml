@@ -13,7 +13,7 @@
         android:icon="@drawable/order_svgrepo_com"
         android:title="Đơn hàng" />
     <item
-        android:id="@+id/TaiKhoanAdmin"
-        android:icon="@drawable/account_settings_svgrepo_com"
-        android:title="Tài khoản" />
+        android:id="@+id/Feedback"
+        android:icon="@drawable/customer_rate_svgrepo_com"
+        android:title="Feedback" />
 </menu>

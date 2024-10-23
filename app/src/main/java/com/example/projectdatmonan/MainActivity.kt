@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projectdatdatHang.Database.CRUD_DatHang
+import com.example.projectdatmonan.Database.CRUD_DanhGia
 import com.example.projectdatmonan.Database.CRUD_MonAn
 import com.example.projectdatmonan.Database.DBConnection
 import com.example.projectdatmonan.Model.MonAn
@@ -21,23 +23,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.quan_ly_mon_an)
 
 //        val button: Button = findViewById(R.id.buttonTest)
-
+//
 //        button.setOnClickListener {
 //            val tv: TextView = findViewById(R.id.textViewShow)
-//            val db: CRUD_MonAn = CRUD_MonAn()
-//            val monAn = MonAn(
-//                tenMonAn = "Súp cua",
-//                gia = 30000.0,
-//                trangThai = "Còn hàng",
-//                moTaChiTiet = "Súp và cua",
-//                trangThaiGiamGia = 32,
-//                hinhAnh = listOf("pho_bo_1.jpg", "pho_bo_2.jpg"),
-//                loaiMonAn = "-O86Xz9VZWTIVdVRcuyy"
-//            )
-//            Toast.makeText(this,"ok",Toast.LENGTH_SHORT).show()
-//            db.getMonAnTheoLoai("-O86Xz9VZWTIVdVRcuyy"){list ->
+//            val db = CRUD_DatHang()
+////            val monAn = MonAn(
+////                tenMonAn = "Súp cua",
+////                gia = 30000.0,
+////                trangThai = "Còn hàng",
+////                moTaChiTiet = "Súp và cua",
+////                trangThaiGiamGia = 32,
+////                hinhAnh = listOf("pho_bo_1.jpg", "pho_bo_2.jpg"),
+////                loaiMonAn = "-O86Xz9VZWTIVdVRcuyy"
+////            )
+//            Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show()
+//            db.getMonAnDaBan(3) { list ->
 //                if (list != null) {
-//                    tv.setText(list.size.toString())
+//                    tv.setText(list.toString())
 //                }
 //            }
 //        }
@@ -52,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.ThongKe -> {
-                    loadFragment(FragmentQuanLyLoaiMonAn())
+                    loadFragment(FragmentThongKe())
                     true
                 }
 
@@ -61,6 +63,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.Feedback -> {
+                    loadFragment(FragmentXemDanhGia())
+                    true
+                }
                 else -> {
                     loadFragment(FragmentQuanLyMonAn())
                     true
