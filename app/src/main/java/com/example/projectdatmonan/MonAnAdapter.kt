@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.projectdatmonan.Model.MonAn
 import com.example.projectdatmonan.databinding.ViewHolderRecommendatedBinding
 import com.google.firebase.storage.FirebaseStorage
+import kotlin.math.log
 
 class MonAnAdapter(private var monAnList: List<MonAn>) :
     RecyclerView.Adapter<MonAnAdapter.MonAnViewHolder>() {
@@ -76,8 +77,15 @@ class MonAnAdapter(private var monAnList: List<MonAn>) :
             }
             itemView.setOnClickListener {
                 Log.d("ItemClick", "Món ăn: ${monAn.tenMonAn}, ID: $monAnId")
-                val intent = Intent(itemView.context, RegisterActivity::class.java)
+                val intent = Intent(itemView.context, ChiTietMonAnActivity::class.java)
                 intent.putExtra("monAnId", monAnId)
+                intent.putExtra("tenMonAn", monAn.tenMonAn)
+                intent.putExtra("gia", monAn.gia)
+                intent.putExtra("moTa", monAn.moTaChiTiet)
+                intent.putExtra("trangThaiGiamGia", monAn.trangThaiGiamGia)
+                Log.d("ItemClick", "Món ăn: ${monAn.trangThaiGiamGia}, ID: $monAnId")
+                intent.putStringArrayListExtra("hinhAnhList", ArrayList(monAn.hinhAnh))
+
                 itemView.context.startActivity(intent)
             }
         }

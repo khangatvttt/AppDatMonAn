@@ -1,16 +1,4 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#4CAF50" /> <!-- Background color for button -->
-    <corners android:radius="16dp" /> <!-- Corner radius for rounded corners -->
-    <padding
-        android:left="10dp"
-        android:top="10dp"
-        android:right="10dp"
-        android:bottom="10dp" />
-=======
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="#FF5722"/> <!-- Màu nút chính -->
     <corners android:radius="8dp"/>
->>>>>>> origin/PhiHung
 </shape>

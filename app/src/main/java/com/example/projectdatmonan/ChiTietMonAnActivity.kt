@@ -36,9 +36,9 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chitietmonan)
 
         // Initialize DBConnection and CRUD classes
-        dbConnection = DBConnection()
-        crudDanhGia = CRUD_DanhGia(dbConnection)
-        crudGioHang = CRUD_GioHang(dbConnection)
+
+        crudDanhGia = CRUD_DanhGia()
+        crudGioHang = CRUD_GioHang()
 
         soLuongDanhGiaTextView = findViewById(R.id.soLuongDanhGia)
         sapXepTheoTextView = findViewById(R.id.SapXepTheo)
@@ -56,8 +56,10 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
         val foodName = intent.getStringExtra("tenMonAn")
         val foodPrice = intent.getDoubleExtra("gia", 0.0)
         val moTa = intent.getStringExtra("moTa")
-        val hinhAnhUrl = intent.getStringExtra("hinhAnh")
-        val maMonAn = intent.getStringExtra("maMonAn")
+        val maMonAn = intent.getStringExtra("monAnId")
+        val trangThaiGiamGia = intent.getIntExtra("trangThaiGiamGia",100)
+
+
         val hinhAnhList = intent.getStringArrayListExtra("hinhAnhList") ?: arrayListOf()
 
 
@@ -65,12 +67,15 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
         val foodPriceTextView = findViewById<TextView>(R.id.tv_giaGoc)
         val descriptionTextView = findViewById<TextView>(R.id.tv_moTa)
         val foodImageView = findViewById<ImageView>(R.id.img_food)
+        val giamGia = findViewById<TextView>(R.id.tv_giaGiam)
+        val tinhGiaGiam = foodPrice * (100 - trangThaiGiamGia?.toInt()!!) / 100
 
 
         // Display food details
         foodNameTextView.text = foodName
         foodPriceTextView.text = "$foodPrice VNĐ"
         descriptionTextView.text = moTa
+        giamGia.text = tinhGiaGiam.toString()
 
 
         Glide.with(this).load(hinhAnhList[0]).into(foodImageView)

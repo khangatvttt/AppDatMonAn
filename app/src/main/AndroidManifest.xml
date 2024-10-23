@@ -26,9 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ThemSPVaoGioHangActivity" />
         <activity android:name=".ChiTietMonAnActivity" />
-        <activity android:name=".GioHangActivity" />
 
         <activity
             android:name=".RegisterActivity"

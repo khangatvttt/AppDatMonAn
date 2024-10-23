@@ -4,10 +4,11 @@ import com.example.projectdatmonan.Model.DanhGia
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class CRUD_DanhGia(private val dbConnection: DBConnection) {
-
+class CRUD_DanhGia {
+    private val dbConnection = DBConnection()
     private val danhGiaRef: DatabaseReference = dbConnection.getDanhGiaRef()
 
     // Lấy danh sách đánh giá theo mã món ăn
@@ -62,5 +63,28 @@ class CRUD_DanhGia(private val dbConnection: DBConnection) {
         danhGiaRef.removeValue()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { exception -> onFailure(exception.message ?: "Lỗi không xác định") }
+    }
+    fun fetchDanhGia(
+        monAnId: String,
+        onComplete: (List<Int>) -> Unit,
+        onError: (DatabaseError) -> Unit
+    ) {
+        val ref = FirebaseDatabase.getInstance().getReference("DanhGia")
+            .orderByChild("maMonAn").equalTo(monAnId)
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val ratings = mutableListOf<Int>()
+                for (childSnapshot in snapshot.children) {
+                    val danhGia = childSnapshot.getValue(DanhGia::class.java)
+                    danhGia?.soSao?.let { ratings.add(it.toInt()) }
+                }
+                onComplete(ratings)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onError(error)
+            }
+        })
     }
 }

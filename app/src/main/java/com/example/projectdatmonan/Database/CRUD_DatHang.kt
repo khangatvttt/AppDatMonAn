@@ -1,6 +1,7 @@
 package com.example.projectdatmonan.Database
 
-import com.example.projectdatmonan.Model.DatHang
+
+import DatHang
 import com.google.firebase.database.FirebaseDatabase
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
