@@ -1,11 +1,39 @@
-package com.example.projectdatLoaiMonAn.Database
+package com.example.projectdatmonan.Database
 
 import com.example.projectdatmonan.Model.LoaiMonAn
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
-class CRUD_LoaiLoaiMonAn {
+class CRUD_LoaiMonAn {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+
+
+    fun loadCategory(onComplete: (List<LoaiMonAn>, Map<String, String>) -> Unit, onError: (String) -> Unit) {
+        val ref = database.child("LoaiMonAn")
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val lists = mutableListOf<LoaiMonAn>()
+                val categoryIdMap = mutableMapOf<String, String>()
+
+                for (childSnapshot in snapshot.children) {
+                    val category = childSnapshot.getValue(LoaiMonAn::class.java)
+                    val key = childSnapshot.key
+                    if (category != null && key != "All") {
+                        lists.add(category)
+                        categoryIdMap[category.tenMonAn ?: ""] = key ?: ""
+                    }
+                }
+                onComplete(lists, categoryIdMap)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onError("Failed to load data: ${error.message}")
+            }
+        })
+    }
 
     fun addLoaiLoaiMonAn(loaiMonAn: LoaiMonAn, onComplete: (Boolean) -> Unit) {
         val newId = database.child("LoaiMonAn").push().key

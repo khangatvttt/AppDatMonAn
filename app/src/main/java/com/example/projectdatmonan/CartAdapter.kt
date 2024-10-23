@@ -1,80 +1,115 @@
 package com.example.projectdatmonan
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectdatmonan.Model.MonAn
-import com.google.gson.Gson
+import com.bumptech.glide.Glide
+import com.example.projectdatmonan.Database.CRUD_GioHang
+import com.example.projectdatmonan.Model.ListMonAn
+import com.example.projectdatmonan.databinding.ViewHolderCartBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class CartAdapter(
-    private val cartItems: MutableList<MonAn>,
-    private val onItemRemoved: (MutableList<MonAn>) -> Unit // Callback để cập nhật khi xóa
+    private var cartItems: List<ListMonAn>,
+    private val dishNames: Map<String, String?>,
+    private val dishPrices: Map<String, Double?>,
+    private val dishImages: Map<String, String?>,
+    private val maNguoiDung: String,
+    private val onItemClicked: (ListMonAn) -> Unit,
+    private val onQuantityChanged: () -> Unit
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
-    inner class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemImage: ImageView = itemView.findViewById(R.id.image)
-        val itemName: TextView = itemView.findViewById(R.id.tenMonAn)
-        val itemPrice: TextView = itemView.findViewById(R.id.giaMonAn)
-        val itemQuantity: TextView = itemView.findViewById(R.id.soluong)
-        val buttonDecrease: ImageButton = itemView.findViewById(R.id.btn_giam)
-        val buttonIncrease: ImageButton = itemView.findViewById(R.id.btn_tang)
-        val buttonRemove: Button = itemView.findViewById(R.id.btn_xoa)
+    private val crudGioHang = CRUD_GioHang()
+
+    inner class CartViewHolder(private val binding: ViewHolderCartBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: ListMonAn) {
+            binding.txtTitle.text = dishNames[item.maMonAn] ?: "Unknown Dish"
+            binding.txtNumberItem.text = item.soLuong.toString()
+            val price = dishPrices[item.maMonAn]
+            binding.txtFee.text = price?.let { "$it VND" } ?: "N/A"
+            val total = (item.soLuong ?: 0) * (price ?: 0.0)
+            binding.txtTotalItem.text = "${total} VND"
+            val imageUrl = dishImages[item.maMonAn]
+            if (imageUrl != null) {
+                Glide.with(binding.imgItemCart.context)
+                    .load(imageUrl)
+                    .into(binding.imgItemCart)
+            } else {
+                binding.imgItemCart.setImageResource(R.drawable.grey_bg)
+            }
+
+            binding.btnPlusCart.setOnClickListener {
+                item.soLuong = (item.soLuong ?: 0) + 1
+                crudGioHang.updateQuantityInDatabase(maNguoiDung, item, {
+                    notifyItemChanged(adapterPosition)
+                    onQuantityChanged()
+                }, { error ->
+                    Log.e("Firebase", "Failed to update quantity", error)
+                })
+            }
+
+            binding.btnMinusCart.setOnClickListener {
+                if ((item.soLuong ?: 0) > 1) {
+                    item.soLuong = (item.soLuong ?: 0) - 1
+                    crudGioHang.updateQuantityInDatabase(maNguoiDung, item, {
+                        notifyItemChanged(adapterPosition)
+                        onQuantityChanged()
+                    }, { error ->
+                        Log.e("Firebase", "Failed to update quantity", error)
+                    })
+                } else if ((item.soLuong ?: 0) == 1) {
+                    crudGioHang.removeItemFromCart(maNguoiDung, item, {
+                        cartItems = cartItems.filter { it.maMonAn != item.maMonAn }
+                        notifyDataSetChanged()
+                        onQuantityChanged()
+                    }, { error ->
+                        Log.e("Firebase", "Failed to remove item from cart", error)
+                    })
+                }
+            }
+            binding.btnDeleteCart.setOnClickListener{
+                crudGioHang.removeItemFromCart(maNguoiDung, item, {
+                    cartItems = cartItems.filter { it.maMonAn != item.maMonAn }
+                    notifyDataSetChanged()
+                    onQuantityChanged()
+                }, { error ->
+                    Log.e("Firebase", "Failed to remove item from cart", error)
+                })
+            }
+
+            itemView.setOnClickListener {
+                onItemClicked(item)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.spcanthem_layout, parent, false)
-        return CartViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ViewHolderCartBinding.inflate(inflater, parent, false)
+        return CartViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
+        holder.bind(cartItems[position])
     }
 
     override fun getItemCount(): Int {
         return cartItems.size
     }
 
-    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        val item = cartItems[position]
-
-        holder.itemName.text = item.tenMonAn
-        holder.itemPrice.text = "${item.gia} VNĐ"
-        holder.itemQuantity.text = item.soLuong.toString()
-
-        //holder.itemImage.setImageResource(item.hinhAnh?.get(0)?.toInt() ?: R.drawable.pho_bo_1)
-
-        // Xóa item khỏi giỏ hàng
-        holder.buttonRemove.setOnClickListener {
-            val context = holder.itemView.context
-            val alertDialog = android.app.AlertDialog.Builder(context)
-            alertDialog.setTitle("Xác nhận xóa")
-            alertDialog.setMessage("Bạn có chắc chắn muốn xóa món ăn này khỏi giỏ hàng không?")
-            alertDialog.setPositiveButton("Có") { _, _ ->
-                // Kiểm tra xem vị trí còn hợp lệ không trước khi xóa
-                if (position >= 0 && position < cartItems.size) {
-                    // Xóa món ăn nếu người dùng chọn "Có"
-                    cartItems.removeAt(position)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, cartItems.size) // Cập nhật lại danh sách
-
-                    updateCartItemsInPreferences(context)
-                    onItemRemoved(cartItems) // Gọi callback để cập nhật tổng tiền
-                }
-            }
-            alertDialog.setNegativeButton("Không") { dialog, _ ->
-                dialog.dismiss()
-            }
-            alertDialog.show()
-        }
-
+    fun updateCartItems(newCartItems: List<ListMonAn>) {
+        cartItems = newCartItems
+        notifyDataSetChanged()
     }
 
-    private fun updateCartItemsInPreferences(context: android.content.Context) {
-        val sharedPreferences = context.getSharedPreferences("GioHang", android.content.Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val updatedCartItemsJson = Gson().toJson(cartItems)
-        editor.putString("cart_items", updatedCartItemsJson)
-        editor.apply()
+    fun getQuantityForDish(maMonAn: String): Int? {
+        return cartItems.find { it.maMonAn == maMonAn }?.soLuong
     }
 }
