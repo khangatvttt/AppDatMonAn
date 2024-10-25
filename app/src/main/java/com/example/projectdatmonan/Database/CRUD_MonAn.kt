@@ -3,7 +3,7 @@ package com.example.projectdatmonan.Database
 import com.example.projectdatmonan.Model.MonAn
 import com.google.firebase.database.*
 
-import com.example.projectdatmonan.Model.MonAn
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -33,7 +33,6 @@ class CRUD_MonAn {
             }
         })
     }
-    private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     fun addMonAn(monAn: MonAn, onComplete: (Boolean) -> Unit) {
         val newUserId = database.child("MonAn").push().key

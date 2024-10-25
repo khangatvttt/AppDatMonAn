@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bumptech.glide.Glide
-import com.example.projectdatLoaiMonAn.Database.CRUD_LoaiLoaiMonAn
+import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
 import com.example.projectdatmonan.Database.FirebaseStorageDB
 import com.example.projectdatmonan.Model.LoaiMonAn
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -36,7 +36,7 @@ private const val ARG_PARAM2 = "param2"
 
 class FragmentQuanLyLoaiMonAn : Fragment(), LoaiMonAnAdminAdapter.OnItemClickListener {
     private val firebaseStorage:FirebaseStorageDB = FirebaseStorageDB()
-    private val db:CRUD_LoaiLoaiMonAn = CRUD_LoaiLoaiMonAn()
+    private val db:CRUD_LoaiMonAn = CRUD_LoaiMonAn()
     private var imageUriUpload:Uri? = null
     private var recyclerView: RecyclerView? = null
     private lateinit var adapter: LoaiMonAnAdminAdapter
@@ -72,7 +72,7 @@ class FragmentQuanLyLoaiMonAn : Fragment(), LoaiMonAnAdminAdapter.OnItemClickLis
         addButton?.visibility = View.GONE
 
 
-        val db = CRUD_LoaiLoaiMonAn()
+        val db = CRUD_LoaiMonAn()
         db.getAllLoaiLoaiMonAn { mapLoaiMonAn ->
             recyclerView?.layoutManager = GridLayoutManager(this.context, 2)
             adapter = mapLoaiMonAn?.let { LoaiMonAnAdminAdapter(it, this) }!!
@@ -180,7 +180,7 @@ class FragmentQuanLyLoaiMonAn : Fragment(), LoaiMonAnAdminAdapter.OnItemClickLis
                 var successCount = 0
                 var failCount = 0
 
-                val db = CRUD_LoaiLoaiMonAn()
+                val db = CRUD_LoaiMonAn()
 
                 selectedPositions.forEachIndexed { index, position ->
                     val keyToDelete = adapter.foodMap.entries.toList().sortedWith(
@@ -357,7 +357,7 @@ class FragmentQuanLyLoaiMonAn : Fragment(), LoaiMonAnAdminAdapter.OnItemClickLis
 
     private fun addLoaiMonAnVaoDB(tenLoai:String, linkImage:String){
         val loaiMonAn = LoaiMonAn(tenLoai,linkImage)
-        db.addLoaiLoaiMonAn(loaiMonAn){key->
+        db.addLoaiMonAn(loaiMonAn){key->
             if (key!=null){
                 val newfoodMap = adapter.foodMap
                 newfoodMap[key] = loaiMonAn

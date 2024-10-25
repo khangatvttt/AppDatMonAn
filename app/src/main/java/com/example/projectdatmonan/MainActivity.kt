@@ -15,6 +15,7 @@ import com.example.projectdatmonan.Database.CRUD_MonAn
 import com.example.projectdatmonan.Database.DBConnection
 import com.example.projectdatmonan.Model.MonAn
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.DatabaseReference
 
 class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
@@ -25,27 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quan_ly_mon_an)
 
-//        val button: Button = findViewById(R.id.buttonTest)
-//
-//        button.setOnClickListener {
-//            val tv: TextView = findViewById(R.id.textViewShow)
-//            val db = CRUD_DatHang()
-////            val monAn = MonAn(
-////                tenMonAn = "Súp cua",
-////                gia = 30000.0,
-////                trangThai = "Còn hàng",
-////                moTaChiTiet = "Súp và cua",
-////                trangThaiGiamGia = 32,
-////                hinhAnh = listOf("pho_bo_1.jpg", "pho_bo_2.jpg"),
-////                loaiMonAn = "-O86Xz9VZWTIVdVRcuyy"
-////            )
-//            Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show()
-//            db.getMonAnDaBan(3) { list ->
-//                if (list != null) {
-//                    tv.setText(list.toString())
-//                }
-//            }
-//        }
+
 
         loadFragment(FragmentQuanLyLoaiMonAn())
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)

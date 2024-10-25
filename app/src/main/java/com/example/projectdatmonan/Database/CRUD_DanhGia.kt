@@ -7,10 +7,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-import com.example.projectdatmonan.Model.DanhGia
+
 import com.example.projectdatmonan.Model.MonAn
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+
 
 class CRUD_DanhGia {
     private val dbConnection = DBConnection()

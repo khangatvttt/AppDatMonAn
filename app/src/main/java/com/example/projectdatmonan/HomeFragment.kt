@@ -20,8 +20,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+
 import com.example.projectdatmonan.Database.CRUD_DanhGia
 import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
+
 import com.example.projectdatmonan.Database.CRUD_MonAn
 import com.example.projectdatmonan.Model.LoaiMonAn
 import com.example.projectdatmonan.Model.MonAn

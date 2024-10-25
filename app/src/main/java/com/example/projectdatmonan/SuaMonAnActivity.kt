@@ -20,7 +20,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.denzcoskun.imageslider.ImageSlider
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
-import com.example.projectdatLoaiMonAn.Database.CRUD_LoaiLoaiMonAn
+import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
+
 import com.example.projectdatmonan.Database.CRUD_MonAn
 import com.example.projectdatmonan.Database.FirebaseStorageDB
 import com.example.projectdatmonan.Model.LoaiMonAn
@@ -46,7 +47,7 @@ class SuaMonAnActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sua_mon_an)
 
-        val dbLoaiMonAn = CRUD_LoaiLoaiMonAn()
+        val dbLoaiMonAn = CRUD_LoaiMonAn()
         val slider = findViewById<Slider>(R.id.sliderGiamGia)
         val sliderLabel = findViewById<TextView>(R.id.textViewGiamGia)
         val giaMonAn = findViewById<TextInputEditText>(R.id.giaMonAnAdd)

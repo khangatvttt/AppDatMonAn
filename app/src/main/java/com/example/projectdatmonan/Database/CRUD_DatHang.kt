@@ -1,7 +1,7 @@
 package com.example.projectdatdatHang.Database
 
+import DatHang
 import com.example.projectdatmonan.Database.CRUD_MonAn
-import com.example.projectdatmonan.Model.DatHang
 import com.example.projectdatmonan.Model.MonAn
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -12,10 +12,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 
-import DatHang
-import com.google.firebase.database.FirebaseDatabase
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+
 
 class CRUD_DatHang {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
