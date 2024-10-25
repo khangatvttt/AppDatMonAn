@@ -1,23 +1,12 @@
 package com.example.projectdatmonan
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.projectdatdatHang.Database.CRUD_DatHang
-import com.example.projectdatmonan.Database.CRUD_DanhGia
-import com.example.projectdatmonan.Database.CRUD_MonAn
-import com.example.projectdatmonan.Database.DBConnection
-import com.example.projectdatmonan.Model.MonAn
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DatabaseReference
 
-class MainActivity : AppCompatActivity() {
+class MainActivityAdmin : AppCompatActivity() {
     private lateinit var database: DatabaseReference
 
     lateinit var bottomNav: BottomNavigationView
