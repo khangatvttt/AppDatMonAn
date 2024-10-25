@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 
     <application
@@ -36,6 +37,14 @@
         </activity>
         <activity android:name=".ChiTietMonAnActivity" />
 
+        <activity
+            android:name=".DuyetDonFragment"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".RegisterActivity"
             android:exported="true">
