@@ -1,12 +1,13 @@
 import com.example.projectdatmonan.Model.ListMonAn
 
-data class DatHang(
-    var maNguoiDung: String? = null,
-    var listMonAn: List<ListMonAn>? = null,
-    var ngayGioDat: String? = null,
-    var tinhTrang: String? = null,
+data class DatHang1(
+    val listMonAn: List<ListMonAn>? = null,
+    val maDatHang: String? = null, // Thêm mã đặt hàng
+    val maNguoiDung: String? = null,
     val diaChiGiaoHang: String? = null,
+    val tinhTrang: String? = null,
+    val ngayGioDat: String? = null,
     val sdt: String? = null,
-    var tongTien: Double? = null
-)
+    val tongTien: Long?=null,
 
+    )

@@ -1,6 +1,7 @@
 package com.example.projectdatmonan
 
 import DatHang
+import DatHang1
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,13 +20,13 @@ import java.util.*
 class DuyetDonFragment : Fragment() {
 
     private lateinit var database: DatabaseReference
-    private var orderList = mutableListOf<DatHang>()
+    private var orderList = mutableListOf<DatHang1>()
     private lateinit var recyclerViewOrders: RecyclerView
     private lateinit var spinnerFilterStatus: Spinner
     private lateinit var btnDatePicker: Button
     private lateinit var tvSelectedDate: TextView  // TextView để hiển thị ngày đã chọn
     private var selectedDate: Calendar? = null
-    private var filteredOrderList = mutableListOf<DatHang>()
+    private var filteredOrderList = mutableListOf<DatHang1>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -150,7 +151,7 @@ class DuyetDonFragment : Fragment() {
                             listMonAn.add(monAn)
                         }
 
-                        val order = DatHang(
+                        val order = DatHang1(
                             maDatHang = orderKey,
                             maNguoiDung = maNguoiDung,
                             diaChiGiaoHang = diaChiGiaoHang,
@@ -173,7 +174,7 @@ class DuyetDonFragment : Fragment() {
         })
     }
 
-    private fun setupRecyclerView(orders: List<DatHang>) {
+    private fun setupRecyclerView(orders: List<DatHang1>) {
         recyclerViewOrders.adapter = object : RecyclerView.Adapter<OrderViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
                 val view = LayoutInflater.from(parent.context)
@@ -204,7 +205,7 @@ class DuyetDonFragment : Fragment() {
         private val tvPhoneNumber: TextView = itemView.findViewById(R.id.tvPhoneNumber)
         private val spinnerOrderStatus: Spinner = itemView.findViewById(R.id.spinnerOrderStatus)
 
-        fun bind(order: DatHang) {
+        fun bind(order: DatHang1) {
             tvOrderID.text = "Mã đơn hàng: ${order.maDatHang}"
             tvOrderDate.text = "Ngày đặt: ${order.ngayGioDat}"
             tvOrderAddress.text = "Địa chỉ giao: ${order.diaChiGiaoHang}"

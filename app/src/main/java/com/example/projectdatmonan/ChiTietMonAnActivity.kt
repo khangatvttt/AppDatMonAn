@@ -15,6 +15,7 @@ import com.example.projectdatmonan.Model.DanhGia
 import com.example.projectdatmonan.Model.GioHang
 import com.example.projectdatmonan.Model.ListMonAn
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
 
 class   ChiTietMonAnActivity : AppCompatActivity() {
 
@@ -50,6 +51,7 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
         val btn_GioHang = findViewById<ImageButton>(R.id.btn_GioHang)
         val btn_back = findViewById<ImageButton>(R.id.btn_back)
         val rvImages = findViewById<RecyclerView>(R.id.rv_images)
+
 
 
         // Get the data passed from HomeFragment

@@ -33,6 +33,9 @@ class RegisterActivity : Activity() {
     private lateinit var handler: Handler
     private lateinit var checkEmailRunnable: Runnable
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_register) // Liên kết với giao diện đăng ký
 
         // Khởi tạo các View
         emailEditText = findViewById(R.id.emailEditText)

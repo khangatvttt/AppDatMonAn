@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectdatmonan.Database.CRUD_GioHang
+import com.example.projectdatmonan.Database.CRUD_NguoiDung
 import com.example.projectdatmonan.Model.GioHang
 import com.example.projectdatmonan.Model.ListMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.example.projectdatmonan.databinding.FragmentCartBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -26,14 +29,32 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
     private val dishNames = mutableMapOf<String, String?>()
     private val dishPrices = mutableMapOf<String, Double?>()
     private val dishImages = mutableMapOf<String, String?>()
-    private val maNguoiDung = "user01"
+    private lateinit var maNguoiDung: String
+
+
     private lateinit var txtTotal: TextView
     private val crudGioHang = CRUD_GioHang()
+    private val crudNguoiDung = CRUD_NguoiDung()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            user.email?.let {
+                getUserIdByEmail(it) { userId ->
+                    if (userId != null) {
+                        maNguoiDung = userId // Gán giá trị userId cho manguoidung
+                        Log.d("abc",maNguoiDung)
+                    } else {
+                        Log.d("abc",maNguoiDung)
+                    }
+                }
+            }
+        }
+
+
         binding = FragmentCartBinding.inflate(inflater, container, false)
         txtTotal = binding.txtTotal
 
@@ -47,6 +68,7 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
         setupRecyclerView()
 
         return binding.root
+
     }
 
     private fun setupRecyclerView() {
@@ -134,5 +156,16 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
 
     override fun onOrderPlaced() {
         fetchCartData()
+    }
+
+    private fun getUserIdByEmail(email: String, callback: (String?) -> Unit) {
+        crudNguoiDung.getUserByEmailSnap(email) { snapshot ->
+            if (snapshot != null) {
+                val userId = snapshot.key // Lấy userId từ key của snapshot
+                callback(userId)
+            } else {
+                callback(null) // Trả về null nếu không tìm thấy người dùng
+            }
+        }
     }
 }

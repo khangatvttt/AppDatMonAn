@@ -27,7 +27,7 @@
             android:exported="false"
             android:theme="@style/Theme.ProjectDatMonAn" />
         <activity
-            android:name=".MainActivityAdmin"
+            android:name=".LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +39,10 @@
 
         <activity
             android:name=".DuyetDonFragment"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".MainActivityAdmin"
             android:exported="true">
         </activity>
         <activity

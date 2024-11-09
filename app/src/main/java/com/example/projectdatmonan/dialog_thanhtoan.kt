@@ -94,7 +94,7 @@ class dialog_thanhtoan : DialogFragment() {
                 val nguoiDung = snapshot.getValue(NguoiDung::class.java)
                 nguoiDung?.let {
                     edtName.setText(it.hoTen)
-                    edtPhoneNumber.setText(it.sDT)
+                    edtPhoneNumber.setText(it.sdt)
                     edtAddress.setText(it.diaChi)
                     Log.d("Họ tên", it.hoTen)
                 }
