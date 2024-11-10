@@ -38,9 +38,13 @@ class CartAdapter(
             binding.txtTotalItem.text = "${total} VND"
             val imageUrl = dishImages[item.maMonAn]
             if (imageUrl != null) {
+                Log.d("hahaha",imageUrl)
+            }
+            if (imageUrl != null) {
                 Glide.with(binding.imgItemCart.context)
                     .load(imageUrl)
                     .into(binding.imgItemCart)
+
             } else {
                 binding.imgItemCart.setImageResource(R.drawable.grey_bg)
             }

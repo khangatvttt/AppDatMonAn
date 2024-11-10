@@ -6,16 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectdatmonan.Database.CRUD_GioHang
 import com.example.projectdatmonan.Database.CRUD_NguoiDung
-import com.example.projectdatmonan.Model.GioHang
 import com.example.projectdatmonan.Model.ListMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.example.projectdatmonan.databinding.FragmentCartBinding
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -29,9 +26,7 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
     private val dishNames = mutableMapOf<String, String?>()
     private val dishPrices = mutableMapOf<String, Double?>()
     private val dishImages = mutableMapOf<String, String?>()
-    private lateinit var maNguoiDung: String
-
-
+    private lateinit var maNguoiDung :String
     private lateinit var txtTotal: TextView
     private val crudGioHang = CRUD_GioHang()
     private val crudNguoiDung = CRUD_NguoiDung()
@@ -40,18 +35,11 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            user.email?.let {
-                getUserIdByEmail(it) { userId ->
-                    if (userId != null) {
-                        maNguoiDung = userId // Gán giá trị userId cho manguoidung
-                        Log.d("abc",maNguoiDung)
-                    } else {
-                        Log.d("abc",maNguoiDung)
-                    }
-                }
-            }
+        maNguoiDung = arguments?.getString("USER_ID").toString()
+
+
+        if (maNguoiDung != null) {
+            Log.d("abcd",maNguoiDung)
         }
 
 
@@ -59,9 +47,10 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
         txtTotal = binding.txtTotal
 
         binding.button2.setOnClickListener {
-            val checkoutDialog = dialog_thanhtoan()
+            val checkoutDialog = dialog_thanhtoan(maNguoiDung)
             checkoutDialog.setOrderListener(this)
             checkoutDialog.show(requireActivity().supportFragmentManager, "CheckoutDialog")
+
         }
 
         fetchCartData()
@@ -72,9 +61,11 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
     }
 
     private fun setupRecyclerView() {
-        cartAdapter = CartAdapter(listOf(), dishNames, dishPrices, dishImages, maNguoiDung, { item -> }, {
-            updateTotal()
-        })
+        cartAdapter = maNguoiDung?.let {
+            CartAdapter(listOf(), dishNames, dishPrices, dishImages, it, { item -> }, {
+                updateTotal()
+            })
+        }!!
         binding.viewCart.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = cartAdapter
@@ -82,21 +73,23 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
     }
 
     private fun fetchCartData() {
-        crudGioHang.fetchCartData(maNguoiDung, { cartItems ->
-            if (cartItems.isEmpty()) {
-                binding.txtEmpty.visibility = View.VISIBLE
-                binding.viewCart.visibility = View.GONE
-                binding.button2.isEnabled = false
-            } else {
-                binding.txtEmpty.visibility = View.GONE
-                binding.viewCart.visibility = View.VISIBLE
-                binding.button2.isEnabled = true
-                fetchDishDetails(cartItems)
-            }
-            updateTotal()
-        }, { error ->
-            Log.e("Firebase", "Failed to read data", error.toException())
-        })
+        if (maNguoiDung != null) {
+            crudGioHang.fetchCartData(maNguoiDung, { cartItems ->
+                if (cartItems.isEmpty()) {
+                    binding.txtEmpty.visibility = View.VISIBLE
+                    binding.viewCart.visibility = View.GONE
+                    binding.button2.isEnabled = false
+                } else {
+                    binding.txtEmpty.visibility = View.GONE
+                    binding.viewCart.visibility = View.VISIBLE
+                    binding.button2.isEnabled = true
+                    fetchDishDetails(cartItems)
+                }
+                updateTotal()
+            }, { error ->
+                Log.e("Firebase", "Failed to read data", error.toException())
+            })
+        }
     }
 
     private fun fetchDishDetails(cartItems: List<ListMonAn>) {
@@ -115,15 +108,11 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
                             val giamGia = monAn.trangThaiGiamGia ?: 0
                             dishPrices[maMonAn] = gia * (100 - giamGia) / 100
                             monAn.hinhAnh?.firstOrNull()?.let { imagePath ->
-                                val storageRef = FirebaseStorage.getInstance().getReference(imagePath)
-                                storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                                    dishImages[maMonAn] = downloadUrl.toString()
-                                }.addOnCompleteListener {
-                                    completedFetches++
-                                    if (completedFetches == cartItems.size) {
-                                        cartAdapter.updateCartItems(cartItems)
-                                        updateTotal()
-                                    }
+                                dishImages[maMonAn] = imagePath
+                                completedFetches++
+                                if (completedFetches == cartItems.size) {
+                                    cartAdapter.updateCartItems(cartItems)
+                                    updateTotal()
                                 }
                             } ?: run {
                                 completedFetches++

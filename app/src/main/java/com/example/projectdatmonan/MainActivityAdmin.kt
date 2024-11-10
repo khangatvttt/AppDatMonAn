@@ -32,7 +32,7 @@ class MainActivityAdmin : AppCompatActivity() {
                 }
 
                 R.id.DonHang -> {
-                    loadFragment(FragmentQuanLyMonAn())
+                    loadFragment(DuyetDonFragment())
                     true
                 }
 

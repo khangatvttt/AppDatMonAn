@@ -3,6 +3,7 @@ package com.example.projectdatmonan
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -77,22 +78,36 @@ class LoginActivity : Activity() {
 
 
     // Hàm kiểm tra vai trò của người dùng từ Firebase Realtime Database
-    private fun checkUserRole(userId: String) {
+    private fun checkUserRole(email: String) {
         val crudNguoiDung = CRUD_NguoiDung()
 
-        crudNguoiDung.checkRoleByEmail(userId) { isKH ->
-            if (isKH) {
-                // Chuyển tới MainActivity nếu role là "KH"
-                val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(mainIntent)
-                finish()
+        crudNguoiDung.getUserByEmailSnap(email) { userSnapshot ->
+            if (userSnapshot != null) {
+                val userId = userSnapshot.key // Lấy userId từ snapshot key
+
+                crudNguoiDung.checkRoleByEmail(email) { isKH ->
+                    if (isKH) {
+                        // Chuyển tới MainActivity nếu role là "KH" và truyền userId nếu cần
+                        val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                        mainIntent.putExtra("USER_ID", userId) // Truyền userId qua intent
+                        if (userId != null) {
+                            Log.d("abc",userId)
+                        }
+                        startActivity(mainIntent)
+                        finish()
+                    } else {
+                        val mainIntent = Intent(this@LoginActivity, MainActivityAdmin::class.java)
+                        mainIntent.putExtra("USER_ID", userId) // Truyền userId qua intent
+                        startActivity(mainIntent)
+                        finish()
+                    }
+                }
             } else {
-                val mainIntent = Intent(this@LoginActivity, MainActivityAdmin::class.java)
-                startActivity(mainIntent)
-                finish()
+                Toast.makeText(this, "Không tìm thấy người dùng với email này", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
 
 }

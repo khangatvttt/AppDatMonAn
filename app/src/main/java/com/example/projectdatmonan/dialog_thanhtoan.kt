@@ -20,13 +20,11 @@ import com.example.projectdatmonan.Model.ListMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.example.projectdatmonan.Model.NguoiDung
 import com.google.firebase.database.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-class dialog_thanhtoan : DialogFragment() {
+class dialog_thanhtoan(maNguoiDung: String) : DialogFragment() {
 
     private lateinit var txtCartSummary: TextView
-    private val maNguoiDung = "user01"
+    private val maNguoiDung = maNguoiDung
     private lateinit var edtName: EditText
     private lateinit var edtPhoneNumber: EditText
     private lateinit var edtAddress: EditText

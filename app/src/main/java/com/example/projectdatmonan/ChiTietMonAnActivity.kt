@@ -26,12 +26,13 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
     private lateinit var crudGioHang: CRUD_GioHang
     private lateinit var soLuongDanhGiaTextView: TextView
     private lateinit var sapXepTheoTextView: AutoCompleteTextView
+    private lateinit var maNguoiDung1 :String
+
     private val danhSachTieuChi = listOf(
         "Gần đây nhất",
         "Số sao tăng dần",
         "Số sao giảm dần"
     )
-    private lateinit var maNguoiDung: String // user ID, will be fetched or passed
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chitietmonan)
@@ -59,6 +60,8 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
         val foodPrice = intent.getDoubleExtra("gia", 0.0)
         val moTa = intent.getStringExtra("moTa")
         val maMonAn = intent.getStringExtra("monAnId")
+        maNguoiDung1 = intent.getStringExtra("userID").toString()
+
         val trangThaiGiamGia = intent.getIntExtra("trangThaiGiamGia",100)
 
 
@@ -171,7 +174,7 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
 
         btnAddToCart.setOnClickListener {
             val monAn = ListMonAn(maMonAn = maMonAn, soLuong = quantity)
-            val gioHang = GioHang(maNguoiDung = "user02", listMonAn = listOf(monAn))
+            val gioHang = GioHang(maNguoiDung1, listMonAn = listOf(monAn))
 
             // Call CRUD_GioHang to handle adding to cart
             crudGioHang.addToCart(gioHang, {
@@ -224,7 +227,7 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
             // Tạo đối tượng đánh giá
             val danhGia = DanhGia(
                 maMonAn = maMonAn,
-                maNguoiDung = "user02",
+                maNguoiDung = maNguoiDung1,
                 thoiGian = formattedTime,
                 noiDung = reviewContent,
                 soSao = rating
