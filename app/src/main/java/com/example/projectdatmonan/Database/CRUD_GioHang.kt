@@ -15,20 +15,26 @@ class CRUD_GioHang {
     fun addToCart(gioHang: GioHang, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         val gioHangRef = dbConnection.getGioHangRef()
 
-        // Tìm giỏ hàng của người dùng dựa trên mã người dùng
         gioHangRef.orderByChild("maNguoiDung").equalTo(gioHang.maNguoiDung)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        // Nếu đã tồn tại giỏ hàng với mã người dùng này
+                        // Nếu giỏ hàng đã tồn tại
                         for (snapshot in dataSnapshot.children) {
                             val existingGioHang = snapshot.getValue(GioHang::class.java)
                             existingGioHang?.let { currentCart ->
-                                // Cập nhật danh sách ListMonAn của giỏ hàng hiện tại
-                                val updatedListMonAn = currentCart.listMonAn?.toMutableList()
-                                if (updatedListMonAn != null) {
+                                // Kiểm tra xem listMonAn có món ăn với mã maMonAn đã tồn tại chưa
+                                val updatedListMonAn = currentCart.listMonAn?.toMutableList() ?: mutableListOf()
+                                val existingMonAn = updatedListMonAn.find { it.maMonAn == gioHang.listMonAn?.firstOrNull()?.maMonAn }
+
+                                if (existingMonAn != null) {
+                                    // Nếu món ăn đã tồn tại, tăng số lượng
+                                    existingMonAn.soLuong = existingMonAn.soLuong?.plus(gioHang.listMonAn?.firstOrNull()?.soLuong ?: 0)
+                                } else {
+                                    // Nếu chưa tồn tại, thêm món ăn mới vào danh sách
                                     gioHang.listMonAn?.let { updatedListMonAn.addAll(it) }
-                                } // Thêm món ăn mới vào danh sách
+                                }
+
                                 currentCart.listMonAn = updatedListMonAn
 
                                 // Cập nhật giỏ hàng trong Firebase
@@ -55,6 +61,9 @@ class CRUD_GioHang {
                 }
             })
     }
+
+
+
 
 
     fun fetchCartData(maNguoiDung: String, onComplete: (List<ListMonAn>) -> Unit, onError: (DatabaseError) -> Unit) {

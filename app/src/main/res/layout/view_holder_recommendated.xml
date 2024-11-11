@@ -5,91 +5,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@drawable/card_background">
 
-    <ImageView
-        android:id="@+id/image_food"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:scaleType="centerCrop"
+        app:cardCornerRadius="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/testimage"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/image_food"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/testimage" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/textFoodName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Food Name"
-        android:textSize="25sp"
+        android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#333333"
         android:ellipsize="end"
         android:singleLine="true"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintStart_toEndOf="@id/image_food"
-        app:layout_constraintTop_toTopOf="@id/image_food"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0" />
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintStart_toEndOf="@id/card_view"
+        app:layout_constraintTop_toTopOf="@id/card_view"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textFoodPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="$0.00"
+        android:text="$20.00"
         android:textSize="18sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@id/image_food"
+        android:textColor="#FF9800"
+        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="15dp"
+
+        app:layout_constraintStart_toEndOf="@id/card_view"
         app:layout_constraintTop_toBottomOf="@id/textFoodName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textFoodDiscount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="$0.00"
-        android:textSize="20sp"
+        android:text="$15.00"
+        android:textSize="16sp"
         android:textColor="@android:color/holo_red_dark"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@id/image_food"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="15dp"
+
+        app:layout_constraintStart_toEndOf="@id/card_view"
         app:layout_constraintTop_toBottomOf="@id/textFoodPrice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/textFoodAvailability"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Available"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="@android:color/holo_green_dark"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@id/image_food"
-        app:layout_constraintTop_toBottomOf="@id/textFoodDiscount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0" />
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="15dp"
 
-    <TextView
-        android:id="@+id/txt_sosao"
+        app:layout_constraintStart_toEndOf="@id/card_view"
+        app:layout_constraintTop_toBottomOf="@id/textFoodDiscount"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.913"
-        android:textSize="18dp"
-        android:text="Số sao"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textFoodAvailability">
 
-    <ImageView
-        android:id="@+id/image_star"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/star" />
+        <TextView
+            android:id="@+id/txt_sosao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="Rating: "
+            android:textColor="#666666"
 
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/image_star"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat="@drawable/star" />
+
+        <!-- Add more stars as needed for the rating -->
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
