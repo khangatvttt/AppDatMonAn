@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="17dp"
+                app:cardCornerRadius="100dp">
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/testimage"
+                    android:scaleType="centerCrop"/>
+            </androidx.cardview.widget.CardView>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp">
+                <TableRow
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent">
+                    <TextView
+                        android:id="@+id/tenNguoiDung"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tên người dùng"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="15dp"/>
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:progressTint="@color/lightBlue"
+                        android:layout_marginTop="16dp"
+                        android:layout_gravity="end|bottom"
+                        android:layout_marginEnd="14dp"
+                        style = "?android:attr/ratingBarStyleSmall"
+                        android:clickable="false"/>
+                </TableRow>
+
+                <TableRow>
+                    <TextView
+                        android:id="@+id/ngayGioDanhGia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#808080"
+                        android:layout_marginStart="2dp"
+                        android:text="20-10-2024  9:00" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+</LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_weight="1"
+        android:textColor="#808080"
+        android:text="Đánh giá về món: "
+        android:layout_marginStart="20dp"/>
+    <TextView
+        android:id="@+id/monAnDanhGia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_weight="1"
+        android:text="Hủ tiếu giò heo"
+        android:textStyle="italic|bold"
+        android:layout_marginStart="135dp"/>
+    <TextView
+        android:id="@+id/noiDungDanhGia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="105dp"
+        android:layout_weight="1"
+        android:text="Món này ngon quá mai phải mua nữa thôi"
+        android:layout_marginStart="20dp"/>
+</androidx.cardview.widget.CardView>

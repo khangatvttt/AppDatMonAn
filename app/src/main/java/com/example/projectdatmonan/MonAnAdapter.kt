@@ -6,19 +6,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectdatmonan.Model.MonAn
 import com.example.projectdatmonan.databinding.ViewHolderRecommendatedBinding
 import com.google.firebase.storage.FirebaseStorage
 
-class MonAnAdapter(private var monAnList: List<MonAn>) :
+class MonAnAdapter(private var monAnList: List<MonAn>, userID: String) :
     RecyclerView.Adapter<MonAnAdapter.MonAnViewHolder>() {
 
     private var displayedList = monAnList.toMutableList()
     private val averageRatings = mutableMapOf<String, Double>()
     private val monAnIdMap = mutableMapOf<MonAn, String>()
+    private var maNguoiDung = userID
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonAnViewHolder {
         val binding = ViewHolderRecommendatedBinding.inflate(
@@ -40,7 +40,8 @@ class MonAnAdapter(private var monAnList: List<MonAn>) :
 
     inner class MonAnViewHolder(private val binding: ViewHolderRecommendatedBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(monAn: MonAn, monAnId:String ,averageRating:Double) {
+
+        fun bind(monAn: MonAn, monAnId:String, averageRating:Double) {
             val originalPrice = monAn.gia?.toDouble() ?: 0.00
             val discount = monAn.trangThaiGiamGia?.toDouble() ?: 0.0
             binding.txtSosao.text = String.format("%.1f", averageRating)
@@ -76,8 +77,16 @@ class MonAnAdapter(private var monAnList: List<MonAn>) :
             }
             itemView.setOnClickListener {
                 Log.d("ItemClick", "Món ăn: ${monAn.tenMonAn}, ID: $monAnId")
-                val intent = Intent(itemView.context, RegisterActivity::class.java)
+                val intent = Intent(itemView.context, ChiTietMonAnActivity::class.java)
                 intent.putExtra("monAnId", monAnId)
+                intent.putExtra("tenMonAn", monAn.tenMonAn)
+                intent.putExtra("gia", monAn.gia)
+                intent.putExtra("moTa", monAn.moTaChiTiet)
+                intent.putExtra("trangThaiGiamGia", monAn.trangThaiGiamGia)
+                intent.putExtra("userID", maNguoiDung)
+                Log.d("ItemClick", "Món ăn: ${monAn.trangThaiGiamGia}, ID: $monAnId")
+                intent.putStringArrayListExtra("hinhAnhList", ArrayList(monAn.hinhAnh))
+
                 itemView.context.startActivity(intent)
             }
         }

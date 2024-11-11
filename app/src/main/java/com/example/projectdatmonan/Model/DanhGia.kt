@@ -1,11 +1,13 @@
 package com.example.projectdatmonan.Model
 
-import java.time.LocalDateTime
-
-data class DanhGia (
+data class DanhGia(
+//    var id: String? = null,
     var maMonAn: String? = null,
     var maNguoiDung: String? = null,
     var thoiGian: String? = null,
     var noiDung: String? = null,
-    var soSao: Int? = null,
-)
+    var soSao: Float? = null,
+    var key: String? = null
+){
+    constructor() : this(null, null, null, null, null,null)
+}

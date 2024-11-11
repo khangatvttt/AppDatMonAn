@@ -11,23 +11,60 @@ import com.google.firebase.database.ValueEventListener
 
 class CRUD_GioHang {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+    private val dbConnection = DBConnection()
+    fun addToCart(gioHang: GioHang, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+        val gioHangRef = dbConnection.getGioHangRef()
 
-    fun addGioHang(gioHang: GioHang, onComplete: (Boolean) -> Unit) {
-        val newId = database.child("GioHang").push().key
-        if (newId != null) {
-            database.child("GioHang").child(newId).setValue(gioHang)
-                .addOnSuccessListener {
-                    onComplete(true)
+        gioHangRef.orderByChild("maNguoiDung").equalTo(gioHang.maNguoiDung)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // Nếu giỏ hàng đã tồn tại
+                        for (snapshot in dataSnapshot.children) {
+                            val existingGioHang = snapshot.getValue(GioHang::class.java)
+                            existingGioHang?.let { currentCart ->
+                                // Kiểm tra xem listMonAn có món ăn với mã maMonAn đã tồn tại chưa
+                                val updatedListMonAn = currentCart.listMonAn?.toMutableList() ?: mutableListOf()
+                                val existingMonAn = updatedListMonAn.find { it.maMonAn == gioHang.listMonAn?.firstOrNull()?.maMonAn }
+
+                                if (existingMonAn != null) {
+                                    // Nếu món ăn đã tồn tại, tăng số lượng
+                                    existingMonAn.soLuong = existingMonAn.soLuong?.plus(gioHang.listMonAn?.firstOrNull()?.soLuong ?: 0)
+                                } else {
+                                    // Nếu chưa tồn tại, thêm món ăn mới vào danh sách
+                                    gioHang.listMonAn?.let { updatedListMonAn.addAll(it) }
+                                }
+
+                                currentCart.listMonAn = updatedListMonAn
+
+                                // Cập nhật giỏ hàng trong Firebase
+                                snapshot.ref.setValue(currentCart)
+                                    .addOnSuccessListener { onSuccess() }
+                                    .addOnFailureListener { exception ->
+                                        onFailure(exception.message ?: "Lỗi không xác định")
+                                    }
+                            }
+                        }
+                    } else {
+                        // Nếu giỏ hàng chưa tồn tại, tạo mới
+                        val newCartRef = gioHangRef.push() // Tạo mã mới cho giỏ hàng
+                        newCartRef.setValue(gioHang)
+                            .addOnSuccessListener { onSuccess() }
+                            .addOnFailureListener { exception ->
+                                onFailure(exception.message ?: "Lỗi không xác định")
+                            }
+                    }
                 }
-                .addOnFailureListener { exception ->
-                    println("Error adding GioHang: ${exception.message}")
-                    onComplete(false)
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    onFailure(databaseError.message)
                 }
-        } else {
-            println("Error generating cart ID")
-            onComplete(false)
-        }
+            })
     }
+
+
+
+
 
     fun fetchCartData(maNguoiDung: String, onComplete: (List<ListMonAn>) -> Unit, onError: (DatabaseError) -> Unit) {
         val cartRef = FirebaseDatabase.getInstance().getReference("GioHang")

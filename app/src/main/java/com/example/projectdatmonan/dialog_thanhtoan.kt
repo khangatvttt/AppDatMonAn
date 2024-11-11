@@ -12,20 +12,19 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
-import com.example.projectdatmonan.Database.CRUD_DatHang
-import com.example.projectdatmonan.Model.DatHang
+import com.example.projectdatdatHang.Database.CRUD_DatHang
+
+
 import com.example.projectdatmonan.Model.GioHang
 import com.example.projectdatmonan.Model.ListMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.example.projectdatmonan.Model.NguoiDung
 import com.google.firebase.database.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-class dialog_thanhtoan : DialogFragment() {
+class dialog_thanhtoan(maNguoiDung: String) : DialogFragment() {
 
     private lateinit var txtCartSummary: TextView
-    private val maNguoiDung = "user01"
+    private val maNguoiDung = maNguoiDung
     private lateinit var edtName: EditText
     private lateinit var edtPhoneNumber: EditText
     private lateinit var edtAddress: EditText
@@ -93,7 +92,7 @@ class dialog_thanhtoan : DialogFragment() {
                 val nguoiDung = snapshot.getValue(NguoiDung::class.java)
                 nguoiDung?.let {
                     edtName.setText(it.hoTen)
-                    edtPhoneNumber.setText(it.sDT)
+                    edtPhoneNumber.setText(it.sdt)
                     edtAddress.setText(it.diaChi)
                     Log.d("Họ tên", it.hoTen)
                 }

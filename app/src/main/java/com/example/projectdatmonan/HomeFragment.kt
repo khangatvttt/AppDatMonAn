@@ -20,8 +20,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+
 import com.example.projectdatmonan.Database.CRUD_DanhGia
 import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
+
 import com.example.projectdatmonan.Database.CRUD_MonAn
 import com.example.projectdatmonan.Model.LoaiMonAn
 import com.example.projectdatmonan.Model.MonAn
@@ -50,13 +52,14 @@ class HomeFragment : Fragment() {
     private val crudMonAn = CRUD_MonAn()
     private val crudLoaiMonAn = CRUD_LoaiMonAn()
     private val crudDanhGia = CRUD_DanhGia()
-
+    private lateinit var userID :String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+        userID = arguments?.getString("USER_ID").toString()
 
         viewPopular = view.findViewById(R.id.viewPopular)
         progressBarPopular = view.findViewById(R.id.progressBarPopular)
@@ -92,7 +95,7 @@ class HomeFragment : Fragment() {
 
         database = FirebaseDatabase.getInstance().getReference().child("MonAn")
 
-        monAnAdapter = MonAnAdapter(monAnList)
+        monAnAdapter = MonAnAdapter(monAnList,userID)
         viewPopular.adapter = monAnAdapter
 
         fetchMonAnData()

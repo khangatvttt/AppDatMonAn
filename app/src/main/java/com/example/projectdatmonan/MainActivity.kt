@@ -1,47 +1,40 @@
 package com.example.projectdatmonan
 
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.projectdatmonan.Database.CRUD_GioHang
-import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
-import com.example.projectdatmonan.Model.GioHang
-import com.example.projectdatmonan.Model.ListMonAn
-import com.example.projectdatmonan.Model.LoaiMonAn
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        val userId = intent.getStringExtra("USER_ID")
+
 
         // Đặt Fragment mặc định (ví dụ: HomeFragment)
-        loadFragment(HomeFragment())
-
+        loadFragment(HomeFragment(),userId)
 
         bottomNav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    loadFragment(HomeFragment())
+                    loadFragment(HomeFragment(),userId)
                     true
                 }
                 R.id.nav_cart -> {
-                    loadFragment(CartFragment())
+                    loadFragment(CartFragment(),userId)
                     true
                 }
                 R.id.nav_history -> {
-                    loadFragment(HistoryFragment())
+                    loadFragment(HistoryFragment(),userId)
                     true
                 }
                 R.id.nav_profile -> {
-                    loadFragment(ProfileFragment())
+                    loadFragment(ProfileFragment(),userId)
                     true
                 }
                 else -> false
@@ -50,7 +43,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Hàm để load Fragment
-    private fun loadFragment(fragment: Fragment) {
+    private fun loadFragment(fragment: Fragment, userId: String?) {
+        // Set arguments if userId is available
+        if (userId != null) {
+            val bundle = Bundle()
+            bundle.putString("USER_ID", userId)
+            fragment.arguments = bundle
+        }
+
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
         transaction.commit()

@@ -1,15 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#f9f9f9">
 
-    <!-- Hiển thị Hello World -->
+    <!-- Bộ lọc theo ngày -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lọc theo ngày: "
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginEnd="16dp"/>
+
+        <Button
+            android:id="@+id/btnDateFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chọn ngày"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/colorRed"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="12dp"/>
+    </LinearLayout>
+
+    <!-- TextView hiển thị ngày đã chọn -->
     <TextView
+        android:id="@+id/tvSelectedDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello History!"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:text="Ngày đã chọn: "
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"/>
+
+    <!-- Bộ lọc theo giá -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lọc theo giá: "
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginEnd="16dp"/>
+
+        <EditText
+            android:id="@+id/etMinPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Giá tối thiểu"
+            android:inputType="number"
+            android:layout_weight="1"
+            android:paddingHorizontal="10dp"/>
+
+        <EditText
+            android:id="@+id/etMaxPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Giá tối đa"
+            android:inputType="number"
+            android:layout_weight="1"
+            android:paddingHorizontal="10dp"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <!-- Nút lọc -->
+    <Button
+        android:id="@+id/btnFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lọc"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/colorRed"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- RecyclerView hiển thị danh sách đơn đặt hàng -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewOrders"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="16dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"/>
 </LinearLayout>

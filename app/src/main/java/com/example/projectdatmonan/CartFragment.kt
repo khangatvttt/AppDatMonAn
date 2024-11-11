@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectdatmonan.Database.CRUD_GioHang
-import com.example.projectdatmonan.Model.GioHang
+import com.example.projectdatmonan.Database.CRUD_NguoiDung
 import com.example.projectdatmonan.Model.ListMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.example.projectdatmonan.databinding.FragmentCartBinding
@@ -26,33 +26,46 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
     private val dishNames = mutableMapOf<String, String?>()
     private val dishPrices = mutableMapOf<String, Double?>()
     private val dishImages = mutableMapOf<String, String?>()
-    private val maNguoiDung = "user01"
+    private lateinit var maNguoiDung :String
     private lateinit var txtTotal: TextView
     private val crudGioHang = CRUD_GioHang()
+    private val crudNguoiDung = CRUD_NguoiDung()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        maNguoiDung = arguments?.getString("USER_ID").toString()
+
+
+        if (maNguoiDung != null) {
+            Log.d("abcd",maNguoiDung)
+        }
+
+
         binding = FragmentCartBinding.inflate(inflater, container, false)
         txtTotal = binding.txtTotal
 
         binding.button2.setOnClickListener {
-            val checkoutDialog = dialog_thanhtoan()
+            val checkoutDialog = dialog_thanhtoan(maNguoiDung)
             checkoutDialog.setOrderListener(this)
             checkoutDialog.show(requireActivity().supportFragmentManager, "CheckoutDialog")
+
         }
 
         fetchCartData()
         setupRecyclerView()
 
         return binding.root
+
     }
 
     private fun setupRecyclerView() {
-        cartAdapter = CartAdapter(listOf(), dishNames, dishPrices, dishImages, maNguoiDung, { item -> }, {
-            updateTotal()
-        })
+        cartAdapter = maNguoiDung?.let {
+            CartAdapter(listOf(), dishNames, dishPrices, dishImages, it, { item -> }, {
+                updateTotal()
+            })
+        }!!
         binding.viewCart.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = cartAdapter
@@ -60,21 +73,23 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
     }
 
     private fun fetchCartData() {
-        crudGioHang.fetchCartData(maNguoiDung, { cartItems ->
-            if (cartItems.isEmpty()) {
-                binding.txtEmpty.visibility = View.VISIBLE
-                binding.viewCart.visibility = View.GONE
-                binding.button2.isEnabled = false
-            } else {
-                binding.txtEmpty.visibility = View.GONE
-                binding.viewCart.visibility = View.VISIBLE
-                binding.button2.isEnabled = true
-                fetchDishDetails(cartItems)
-            }
-            updateTotal()
-        }, { error ->
-            Log.e("Firebase", "Failed to read data", error.toException())
-        })
+        if (maNguoiDung != null) {
+            crudGioHang.fetchCartData(maNguoiDung, { cartItems ->
+                if (cartItems.isEmpty()) {
+                    binding.txtEmpty.visibility = View.VISIBLE
+                    binding.viewCart.visibility = View.GONE
+                    binding.button2.isEnabled = false
+                } else {
+                    binding.txtEmpty.visibility = View.GONE
+                    binding.viewCart.visibility = View.VISIBLE
+                    binding.button2.isEnabled = true
+                    fetchDishDetails(cartItems)
+                }
+                updateTotal()
+            }, { error ->
+                Log.e("Firebase", "Failed to read data", error.toException())
+            })
+        }
     }
 
     private fun fetchDishDetails(cartItems: List<ListMonAn>) {
@@ -93,15 +108,11 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
                             val giamGia = monAn.trangThaiGiamGia ?: 0
                             dishPrices[maMonAn] = gia * (100 - giamGia) / 100
                             monAn.hinhAnh?.firstOrNull()?.let { imagePath ->
-                                val storageRef = FirebaseStorage.getInstance().getReference(imagePath)
-                                storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                                    dishImages[maMonAn] = downloadUrl.toString()
-                                }.addOnCompleteListener {
-                                    completedFetches++
-                                    if (completedFetches == cartItems.size) {
-                                        cartAdapter.updateCartItems(cartItems)
-                                        updateTotal()
-                                    }
+                                dishImages[maMonAn] = imagePath
+                                completedFetches++
+                                if (completedFetches == cartItems.size) {
+                                    cartAdapter.updateCartItems(cartItems)
+                                    updateTotal()
                                 }
                             } ?: run {
                                 completedFetches++
@@ -134,5 +145,16 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
 
     override fun onOrderPlaced() {
         fetchCartData()
+    }
+
+    private fun getUserIdByEmail(email: String, callback: (String?) -> Unit) {
+        crudNguoiDung.getUserByEmailSnap(email) { snapshot ->
+            if (snapshot != null) {
+                val userId = snapshot.key // Lấy userId từ key của snapshot
+                callback(userId)
+            } else {
+                callback(null) // Trả về null nếu không tìm thấy người dùng
+            }
+        }
     }
 }

@@ -80,10 +80,11 @@ class RegisterActivity : Activity() {
                 fullNameErrorText.text = "Vui lòng nhập họ tên"
                 isValid = false
             }
-            if (TextUtils.isEmpty(phone)) {
-                phoneErrorText.text = "Vui lòng nhập số điện thoại"
+            if (phone.length != 10) {
+                phoneErrorText.text = "Số điện thoại phải là 10 chữ số"
                 isValid = false
             }
+
             if (TextUtils.isEmpty(email)) {
                 emailErrorText.text = "Vui lòng nhập email"
                 isValid = false
@@ -168,7 +169,7 @@ class RegisterActivity : Activity() {
                 val nguoiDung = NguoiDung().apply {
                     email = it.email.toString()
                     hoTen = fullNameEditText.text.toString().trim()
-                    sDT = phoneEditText.text.toString().trim()
+                    sdt = phoneEditText.text.toString().trim()
                     diaChi = addressEditText.text.toString().trim()
                     role = "KH"
                 }
