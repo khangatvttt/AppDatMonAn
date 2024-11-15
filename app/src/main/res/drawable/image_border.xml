@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer shadow layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#55000000" /> <!-- Shadow color with transparency -->
+            <corners android:radius="16dp" /> <!-- Rounded corners for shadow -->
+        </shape>
+    </item>
+
+    <!-- Padding to create shadow effect around the image -->
+    <item android:left="4dp" android:right="4dp" android:top="4dp" android:bottom="4dp">
+        <!-- Inner border layer -->
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" /> <!-- Background color inside border -->
+            <stroke android:width="2dp" android:color="#FF9800" /> <!-- Border color -->
+            <corners android:radius="16dp" /> <!-- Rounded corners for border -->
+        </shape>
+    </item>
+</layer-list>

@@ -1,6 +1,6 @@
 package com.example.projectdatmonan
 
-import DatHang
+import DatHang1
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,7 +25,7 @@ import java.util.Locale
 class HistoryFragment : Fragment() {
 
     private lateinit var database: DatabaseReference
-    private var orderList = mutableListOf<DatHang>()
+    private var orderList = mutableListOf<DatHang1>()
     private lateinit var recyclerViewOrders: RecyclerView
     private var currentUserId: String? = null
     private var selectedDate: String? = null
@@ -140,8 +140,8 @@ class HistoryFragment : Fragment() {
 
 
 
-                        // Tạo đối tượng DatHang với mã đặt hàng
-                        val order = DatHang(
+                        // Tạo đối tượng DatHang1 với mã đặt hàng
+                        val order = DatHang1(
                             maDatHang = orderKey, // Gán mã đặt hàng vào
                             maNguoiDung = maNguoiDung,
                             diaChiGiaoHang = diaChiGiaoHang,
@@ -178,7 +178,7 @@ class HistoryFragment : Fragment() {
             false
         }
     }
-    private fun filterOrder(order: DatHang): Boolean {
+    private fun filterOrder(order: DatHang1): Boolean {
         // Lọc theo ngày nếu người dùng chọn
         val ngayDat = order.ngayGioDat?.split(" ")?.get(0) ?: ""
         if (selectedDate != null && !isSameDate(ngayDat, selectedDate)) {
@@ -207,7 +207,7 @@ class HistoryFragment : Fragment() {
 
 
 
-private fun setupRecyclerView(orders: List<DatHang>) {
+private fun setupRecyclerView(orders: List<DatHang1>) {
     recyclerViewOrders.adapter = object : RecyclerView.Adapter<OrderViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
             val view = LayoutInflater.from(parent.context)
@@ -238,7 +238,7 @@ inner class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     private val tvPhoneNumber: TextView = itemView.findViewById(R.id.tvPhoneNumber)
 
 
-    fun bind(order: DatHang) {
+    fun bind(order: DatHang1) {
 
         tvOrderID.text = "Mã đơn hàng: ${order.maDatHang}"
         tvOrderDate.text = "Ngày đặt: ${order.ngayGioDat.toString()}"
@@ -260,7 +260,7 @@ inner class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             override fun onDataChange(userSnapshot: DataSnapshot) {
                 val hoTen = userSnapshot.child("hoTen").value as? String
                 // Cập nhật lại danh sách đơn hàng với họ tên
-                tvCustomerName.text = hoTen // Nếu bạn thêm thuộc tính hoTen vào DatHang
+                tvCustomerName.text = hoTen // Nếu bạn thêm thuộc tính hoTen vào DatHang1
                 // Có thể hiển thị họ tên ở nơi khác trong UI nếu cần
             }
 
