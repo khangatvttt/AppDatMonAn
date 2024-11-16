@@ -21,7 +21,8 @@ class CRUD_MonAn {
                 for (monAnSnapshot in snapshot.children) {
                     val monAn = monAnSnapshot.getValue(MonAn::class.java)
                     val monAnId = monAnSnapshot.key
-                    if (monAn != null && monAnId != null) {
+                    // Kiểm tra trạng thái món ăn
+                    if (monAn != null && monAnId != null && monAn.trangThai != "Hết món") {
                         monAnList.add(Pair(monAnId, monAn))
                     }
                 }
