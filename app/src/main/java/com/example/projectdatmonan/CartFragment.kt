@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.text.DecimalFormat
 import com.google.firebase.storage.FirebaseStorage
 
 class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
@@ -131,6 +132,10 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
             }
         }
     }
+    private fun formatPrice(price: Double): String {
+        val formatter = DecimalFormat("#,###") // Định dạng với dấu phẩy phân cách hàng nghìn
+        return formatter.format(price)
+    }
 
     fun updateTotal() {
         var totalAmount = 0.0
@@ -140,7 +145,7 @@ class CartFragment : Fragment(), dialog_thanhtoan.OrderListener {
             totalAmount += (price ?: 0.0) * (quantity ?: 0)
         }
 
-        txtTotal.text = "${totalAmount} VND"
+        txtTotal.text = "${formatPrice(totalAmount)} VND"
     }
 
     override fun onOrderPlaced() {

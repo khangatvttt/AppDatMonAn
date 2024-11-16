@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import java.text.DecimalFormat
 import com.bumptech.glide.Glide
 import com.example.projectdatmonan.Database.CRUD_GioHang
 import com.example.projectdatmonan.Model.ListMonAn
@@ -32,23 +33,28 @@ class CartAdapter(
         fun bind(item: ListMonAn) {
             binding.txtTitle.text = dishNames[item.maMonAn] ?: "Unknown Dish"
             binding.txtNumberItem.text = item.soLuong.toString()
+
             val price = dishPrices[item.maMonAn]
-            binding.txtFee.text = price?.let { "$it VND" } ?: "N/A"
             val total = (item.soLuong ?: 0) * (price ?: 0.0)
-            binding.txtTotalItem.text = "${total} VND"
+
+            // Format giá tiền
+            val formattedPrice = formatPrice(price)
+            binding.txtFee.text = "$formattedPrice VND"
+
+            val formattedTotal = formatPrice(total)
+            binding.txtTotalItem.text = "$formattedTotal VND"
+
+            // Load ảnh
             val imageUrl = dishImages[item.maMonAn]
-            if (imageUrl != null) {
-                Log.d("hahaha",imageUrl)
-            }
             if (imageUrl != null) {
                 Glide.with(binding.imgItemCart.context)
                     .load(imageUrl)
                     .into(binding.imgItemCart)
-
             } else {
                 binding.imgItemCart.setImageResource(R.drawable.grey_bg)
             }
 
+            // Xử lý nút cộng, trừ, và xóa
             binding.btnPlusCart.setOnClickListener {
                 item.soLuong = (item.soLuong ?: 0) + 1
                 crudGioHang.updateQuantityInDatabase(maNguoiDung, item, {
@@ -78,7 +84,8 @@ class CartAdapter(
                     })
                 }
             }
-            binding.btnDeleteCart.setOnClickListener{
+
+            binding.btnDeleteCart.setOnClickListener {
                 crudGioHang.removeItemFromCart(maNguoiDung, item, {
                     cartItems = cartItems.filter { it.maMonAn != item.maMonAn }
                     notifyDataSetChanged()
@@ -115,5 +122,9 @@ class CartAdapter(
 
     fun getQuantityForDish(maMonAn: String): Int? {
         return cartItems.find { it.maMonAn == maMonAn }?.soLuong
+    }
+    private fun formatPrice(price: Double?): String {
+        val formatter = DecimalFormat("#,###") // Định dạng với dấu phẩy
+        return price?.let { formatter.format(it) } ?: "N/A"
     }
 }
