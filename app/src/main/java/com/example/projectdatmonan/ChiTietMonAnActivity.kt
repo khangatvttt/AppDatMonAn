@@ -3,6 +3,7 @@ package com.example.projectdatmonan
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,7 +16,6 @@ import com.example.projectdatmonan.Model.DanhGia
 import com.example.projectdatmonan.Model.GioHang
 import com.example.projectdatmonan.Model.ListMonAn
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
 
 class   ChiTietMonAnActivity : AppCompatActivity() {
 
@@ -80,7 +80,10 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
         foodNameTextView.text = foodName
         foodPriceTextView.text = "$foodPrice VNĐ"
         descriptionTextView.text = moTa
-        giamGia.text = tinhGiaGiam.toString()
+        if(trangThaiGiamGia!=0)
+            giamGia.text = "→ "+tinhGiaGiam.toString() + " VNĐ"
+        else
+            giamGia.isVisible=false
 
 
         Glide.with(this).load(hinhAnhList[0]).into(foodImageView)
@@ -106,7 +109,7 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
 
         // Set up the review list
         val danhGiaList = mutableListOf<DanhGia>()
-        danhGiaAdapter = DanhGiaAdapter(danhGiaList,crudDanhGia)
+        danhGiaAdapter = DanhGiaAdapter(danhGiaList,crudDanhGia,maNguoiDung1)
 
         val recyclerView = findViewById<RecyclerView>(R.id.lvBinhLuanMonAn)
         val horizontalLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

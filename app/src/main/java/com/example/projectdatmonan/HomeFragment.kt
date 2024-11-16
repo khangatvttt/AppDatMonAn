@@ -27,6 +27,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.projectdatmonan.Database.CRUD_DanhGia
 import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
 import com.example.projectdatmonan.Database.CRUD_MonAn
+import com.example.projectdatmonan.Database.CRUD_NguoiDung
 import com.example.projectdatmonan.Model.LoaiMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.google.firebase.database.*
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
     private val crudLoaiMonAn = CRUD_LoaiMonAn()
     private val crudDanhGia = CRUD_DanhGia()
     private lateinit var userID :String
-
+    private var crud_nguoidung = CRUD_NguoiDung()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,6 +73,18 @@ class HomeFragment : Fragment() {
         //viewPopular.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val searchEditText = view.findViewById<EditText>(R.id.searchEditText)
         val searchIcon = view.findViewById<ImageView>(R.id.imageView2)
+
+
+        val tenuser=view.findViewById<TextView>(R.id.tenUser)
+        crud_nguoidung.getNguoiDung(userID){nguoiDung ->
+            if (nguoiDung != null) {
+                tenuser.text = nguoiDung.hoTen
+            }
+        }
+
+
+
+
         noFoodTextView = view.findViewById(R.id.txt_noFood)
         searchIcon.setOnClickListener {
             selectedCategoryName = null
@@ -245,4 +258,5 @@ class HomeFragment : Fragment() {
         Log.d("UpdateAverageRating", "Món ăn: ${monAn.tenMonAn}, Điểm trung bình: $average")
         monAnAdapter.updateRating(monAn, average)
     }
+
 }
