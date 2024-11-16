@@ -1,6 +1,7 @@
 package com.example.projectdatmonan.Adapter
 
 import android.app.AlertDialog
+import android.opengl.Visibility
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,20 +12,25 @@ import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectdatmonan.Model.DanhGia
 import com.example.projectdatmonan.R
 import com.example.projectdatmonan.Database.CRUD_DanhGia
+import com.example.projectdatmonan.Database.CRUD_NguoiDung
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class DanhGiaAdapter(
     private val danhGiaList: MutableList<DanhGia>,
-    private val crudDanhGia: CRUD_DanhGia
+    private val crudDanhGia: CRUD_DanhGia,
+    maNguoiDung1: String
 ) : RecyclerView.Adapter<DanhGiaAdapter.DanhGiaViewHolder>() {
 
+    private var mauser=maNguoiDung1
+    private var crudNguoidung = CRUD_NguoiDung()
     inner class DanhGiaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ratingBar: RatingBar = itemView.findViewById(R.id.rating)
         val ngayGioTextView: TextView = itemView.findViewById(R.id.NgayGio)
@@ -33,6 +39,7 @@ class DanhGiaAdapter(
         val tenTextView: TextView = itemView.findViewById(R.id.txtTen)
         val btnXoa: ImageView = itemView.findViewById(R.id.btnXoa)
         val btnSua: ImageView = itemView.findViewById(R.id.btnSua)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DanhGiaViewHolder {
@@ -59,13 +66,31 @@ class DanhGiaAdapter(
             else -> "Vừa xong"
         }
 
+        if(mauser!=danhGia.maNguoiDung){
+            holder.btnXoa.isVisible = false
+        }
+        else
+            holder.btnXoa.isVisible= true
+        if(mauser!=danhGia.maNguoiDung){
+            holder.btnSua.isVisible = false
+        }else
+            holder.btnSua.isVisible= true
+        danhGia.maNguoiDung?.let {
+            crudNguoidung.getNguoiDung(it){nguoiDung ->
+                if (nguoiDung != null) {
+                    holder.tenTextView.text = nguoiDung.hoTen
+                    Glide.with(holder.itemView.context).load(nguoiDung.avatarUrl).into(holder.avatarImageView)
+                }
+            }
+        }
+
         holder.ngayGioTextView.text = thoiGianTruoc
 
         // Hiển thị nội dung bình luận
         holder.noiDungTextView.text = danhGia.noiDung
 
         // Hiển thị avatar (dùng Glide để load hình ảnh từ URL nếu có)
-        Glide.with(holder.itemView.context).load(R.drawable.testimage).into(holder.avatarImageView)
+
 
         holder.btnXoa.setOnClickListener {
             if (position != RecyclerView.NO_POSITION) {
