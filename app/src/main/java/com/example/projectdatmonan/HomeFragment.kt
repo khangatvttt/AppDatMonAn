@@ -1,7 +1,9 @@
 package com.example.projectdatmonan
 
 
+import SpacingItemDecoration
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,21 +16,22 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.VideoView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-
 import com.example.projectdatmonan.Database.CRUD_DanhGia
 import com.example.projectdatmonan.Database.CRUD_LoaiMonAn
-
 import com.example.projectdatmonan.Database.CRUD_MonAn
 import com.example.projectdatmonan.Model.LoaiMonAn
 import com.example.projectdatmonan.Model.MonAn
 import com.google.firebase.database.*
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+
 
 class HomeFragment : Fragment() {
 
@@ -63,7 +66,10 @@ class HomeFragment : Fragment() {
 
         viewPopular = view.findViewById(R.id.viewPopular)
         progressBarPopular = view.findViewById(R.id.progressBarPopular)
-        viewPopular.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+        viewPopular.layoutManager = gridLayoutManager
+        viewPopular.addItemDecoration(SpacingItemDecoration(16))
+        //viewPopular.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val searchEditText = view.findViewById<EditText>(R.id.searchEditText)
         val searchIcon = view.findViewById<ImageView>(R.id.imageView2)
         noFoodTextView = view.findViewById(R.id.txt_noFood)
@@ -120,13 +126,22 @@ class HomeFragment : Fragment() {
             progressBarFood.visibility = View.GONE
         })
 
-        viewPager = view.findViewById(R.id.viewpageSlider)
+//        viewPager = view.findViewById(R.id.viewpageSlider)
         dotsIndicator = view.findViewById(R.id.dotsIndicator)
 
-        val images = intArrayOf(R.drawable.food_discount, R.drawable.images)
-        sliderAdapter = SliderAdapter(requireContext(), images)
-        viewPager.adapter = sliderAdapter
-        dotsIndicator.setViewPager2(viewPager)
+        val videoView = view.findViewById<VideoView>(R.id.videoSlider)
+        val uri = Uri.parse("android.resource://com.example.projectdatmonan/raw/video")
+        videoView.setVideoURI(uri)
+        videoView.setOnCompletionListener {
+            videoView.start()
+        }
+
+        videoView.start()
+
+//        val images = intArrayOf(R.drawable.food_discount, R.drawable.images)
+//        sliderAdapter = SliderAdapter(requireContext(), images)
+//        viewPager.adapter = sliderAdapter
+//        dotsIndicator.setViewPager2(viewPager)
 
         textSeeAll = view.findViewById(R.id.textView62)
         textSeeAll.setOnClickListener {

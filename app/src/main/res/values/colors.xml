@@ -15,6 +15,7 @@
     <color name="yellow">#FFFF00</color>
     <color name="orange">#FFA500</color>
     <color name="b">#808080</color>
+    <color name="primary_color">#6200EE</color>
 
     <!-- Màu đỏ sử dụng cho các nút và viền -->
     <color name="colorRed">#FF3D00</color>

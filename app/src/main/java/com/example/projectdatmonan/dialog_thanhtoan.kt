@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.DialogFragment
 import com.example.projectdatdatHang.Database.CRUD_DatHang
+import java.text.DecimalFormat
 
 
 import com.example.projectdatmonan.Model.GioHang
@@ -85,7 +86,7 @@ class dialog_thanhtoan(maNguoiDung: String) : DialogFragment() {
     }
 
     private fun loadUserData() {
-        val userRef = FirebaseDatabase.getInstance().getReference("NguoiDung").child("-O87fUJYQQvBzE_ZaWzD") // ID Người dùng
+        val userRef = FirebaseDatabase.getInstance().getReference("NguoiDung").child(maNguoiDung) // ID Người dùng
 
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -135,12 +136,17 @@ class dialog_thanhtoan(maNguoiDung: String) : DialogFragment() {
                     val giaGiam = monAn.gia?.let {
                         it * (100 - (monAn.trangThaiGiamGia ?: 0)) / 100
                     } ?: 0.0
-                    val itemName = "- ${monAn.tenMonAn} (${giaGiam} VND) - Số lượng: $soLuong"
+
+                    val formattedGiaGiam = formatPrice(giaGiam)
+
+                    val itemName = "- ${monAn.tenMonAn} ($formattedGiaGiam VND) - Số lượng: $soLuong"
                     items.add(itemName)
                     listMonAn.add(ListMonAn(maMonAn, soLuong))
+
                     val gia = monAn.gia ?: 0.0
                     val giamGia = monAn.trangThaiGiamGia ?: 0
-                    tongTien += (gia*(100-giamGia)/100) * soLuong
+                    tongTien += (gia * (100 - giamGia) / 100) * soLuong
+
                     updateCartSummary(items)
                 }
             }
@@ -149,6 +155,10 @@ class dialog_thanhtoan(maNguoiDung: String) : DialogFragment() {
                 Log.e("Firebase", "Failed to read data", error.toException())
             }
         })
+    }
+    private fun formatPrice(price: Double): String {
+        val formatter = DecimalFormat("#,###") 
+        return formatter.format(price)
     }
 
     private fun updateCartSummary(items: List<String>) {
