@@ -167,6 +167,7 @@ class RegisterActivity : Activity() {
 
                 // Tạo đối tượng NguoiDung
                 val nguoiDung = NguoiDung().apply {
+                    avatarUrl = "avartamacdinh.jpg"
                     email = it.email.toString()
                     hoTen = fullNameEditText.text.toString().trim()
                     sdt = phoneEditText.text.toString().trim()

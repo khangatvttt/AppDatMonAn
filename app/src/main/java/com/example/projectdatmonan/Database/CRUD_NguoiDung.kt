@@ -67,20 +67,18 @@ class CRUD_NguoiDung {
         }
     }
     // Hàm kiểm tra vai trò của người dùng theo email
-    fun checkRoleByEmail(email: String, onComplete: (Boolean) -> Unit) {
+    fun checkRoleByEmail(email: String, onComplete: (String?) -> Unit) {
         // Truy vấn thông tin người dùng dựa trên email
         database.child("NguoiDung").orderByChild("email").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val isKH = snapshot.children.any { userSnapshot ->
-                        userSnapshot.child("role").getValue(String::class.java) == "KH"
-                    }
-                    onComplete(isKH)
+                    val role = snapshot.children.firstOrNull()?.child("role")?.getValue(String::class.java)
+                    onComplete(role) // Trả về role của người dùng (có thể là "AD" hoặc "KH")
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     println("Database error: ${error.message}")
-                    onComplete(false)
+                    onComplete(null)
                 }
             })
     }
