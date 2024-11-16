@@ -3,6 +3,8 @@ package com.example.projectdatmonan
 import DatHang
 import DatHang1
 import android.app.DatePickerDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectdatmonan.Model.ListMonAn
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -27,11 +30,19 @@ class DuyetDonFragment : Fragment() {
     private lateinit var tvSelectedDate: TextView  // TextView để hiển thị ngày đã chọn
     private var selectedDate: Calendar? = null
     private var filteredOrderList = mutableListOf<DatHang1>()
+    private var isFirstLoad = true
+
+    private val sharedPreferences: SharedPreferences by lazy {
+        requireContext().getSharedPreferences("DatHang", Context.MODE_PRIVATE)
+    }
+
+    private val LAST_ORDER_ID_KEY = "lastOrderId"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.activity_duyetdon, container, false)
     }
 
@@ -57,9 +68,10 @@ class DuyetDonFragment : Fragment() {
         btnDatePicker.setOnClickListener {
             showDatePickerDialog()
         }
-
+        listenForNewOrders()
         // Fetch all orders from Firebase
         fetchOrdersFromFirebase()
+        clearOrderNotificationBadge()
     }
 
     private fun setupFilterSpinner() {
@@ -74,6 +86,93 @@ class DuyetDonFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+    }
+    private fun listenForNewOrders() {
+        database.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+
+
+                // Chuyển dữ liệu snapshot thành đối tượng `DatHang1`
+                val orderKey = snapshot.key
+                val orderData = snapshot.value as Map<String, Any>?
+
+                orderData?.let {
+                    val maNguoiDung = it["maNguoiDung"] as? String
+                    val diaChiGiaoHang = it["diaChiGiaoHang"] as? String
+                    val tinhTrang = it["tinhTrang"] as? String
+                    val ngayGioDat = it["ngayGioDat"] as? String
+                    val sdt = it["sdt"] as? String
+                    val tongTien = it["tongTien"] as? Long
+                    val arrayIDMaMonAn = it["listMonAn"] as? List<Map<String, Any>>
+
+                    val listMonAn = mutableListOf<ListMonAn>()
+                    arrayIDMaMonAn?.forEach { item ->
+                        val maMonAn = item["maMonAn"] as? String
+                        val soLuong = (item["soLuong"] as? Long)?.toInt()
+                        val monAn = ListMonAn(maMonAn, soLuong)
+                        listMonAn.add(monAn)
+                    }
+
+                    val newOrder = DatHang1(
+                        maDatHang = orderKey,
+                        maNguoiDung = maNguoiDung,
+                        diaChiGiaoHang = diaChiGiaoHang,
+                        tinhTrang = tinhTrang,
+                        ngayGioDat = ngayGioDat,
+                        sdt = sdt,
+                        tongTien = tongTien,
+                        listMonAn = listMonAn
+                    )
+
+                    // Thêm vào danh sách và gọi `filterOrders`
+                    orderList.add(newOrder)
+                    filterOrders() // Cập nhật danh sách hiển thị ngay khi có đơn hàng mới
+                    showNewOrderNotification()
+                }
+            }
+
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onChildRemoved(snapshot: DataSnapshot) {}
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, "Lỗi khi lắng nghe đơn hàng mới", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // Đánh dấu lần đầu tải dữ liệu xong
+        isFirstLoad = false
+    }
+    private fun showNewOrderNotification() {
+        val bottomNavigationView: BottomNavigationView? = activity?.findViewById(R.id.bottomNav)
+        bottomNavigationView?.let {
+            // Đếm số lượng đơn hàng có trạng thái "Chờ xử lý"
+            val pendingOrdersCount = orderList.count { order ->
+                order.tinhTrang == "Chờ xử lý"
+            }
+
+            val badge = it.getOrCreateBadge(R.id.DonHang)
+            if (pendingOrdersCount > 0) {
+                badge.isVisible = true
+                badge.text = pendingOrdersCount.toString()
+            } else {
+                badge.isVisible = false
+            }
+        }
+    }
+
+
+    private fun clearOrderNotificationBadge() {
+        val bottomNavigationView: BottomNavigationView? = activity?.findViewById(R.id.bottomNav)
+        bottomNavigationView?.let {
+            it.removeBadge(R.id.DonHang)
+        }
+
+        // Lưu orderId cuối cùng đã xem
+        if (orderList.isNotEmpty()) {
+            val latestOrderId = orderList.last().maDatHang
+            sharedPreferences.edit().putString(LAST_ORDER_ID_KEY, latestOrderId).apply()
         }
     }
 
@@ -105,7 +204,7 @@ class DuyetDonFragment : Fragment() {
 
     private fun filterOrders() {
         filteredOrderList.clear()
-
+        showNewOrderNotification()
         val selectedStatus = spinnerFilterStatus.selectedItem.toString()
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val selectedDateString = selectedDate?.let { dateFormat.format(it.time) }
@@ -173,7 +272,6 @@ class DuyetDonFragment : Fragment() {
             }
         })
     }
-
     private fun setupRecyclerView(orders: List<DatHang1>) {
         recyclerViewOrders.adapter = object : RecyclerView.Adapter<OrderViewHolder>() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {

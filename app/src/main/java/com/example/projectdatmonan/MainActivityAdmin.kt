@@ -17,7 +17,7 @@ class MainActivityAdmin : AppCompatActivity() {
 
 
 
-        loadFragment(FragmentQuanLyLoaiMonAn())
+        loadFragment(DuyetDonFragment())
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {

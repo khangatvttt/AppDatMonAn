@@ -85,21 +85,25 @@ class LoginActivity : Activity() {
             if (userSnapshot != null) {
                 val userId = userSnapshot.key // Lấy userId từ snapshot key
 
-                crudNguoiDung.checkRoleByEmail(email) { isKH ->
-                    if (isKH) {
-                        // Chuyển tới MainActivity nếu role là "KH" và truyền userId nếu cần
-                        val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
-                        mainIntent.putExtra("USER_ID", userId) // Truyền userId qua intent
-                        if (userId != null) {
-                            Log.d("abc",userId)
+                crudNguoiDung.checkRoleByEmail(email) { role ->
+                    when (role) {
+                        "AD" -> {
+                            // Chuyển tới MainActivityAdmin nếu role là "AD"
+                            val adminIntent = Intent(this@LoginActivity, MainActivityAdmin::class.java)
+                            adminIntent.putExtra("USER_ID", userId)
+                            startActivity(adminIntent)
+                            finish()
                         }
-                        startActivity(mainIntent)
-                        finish()
-                    } else {
-                        val mainIntent = Intent(this@LoginActivity, MainActivityAdmin::class.java)
-                        mainIntent.putExtra("USER_ID", userId) // Truyền userId qua intent
-                        startActivity(mainIntent)
-                        finish()
+                        "KH" -> {
+                            // Chuyển tới MainActivity nếu role là "KH"
+                            val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                            mainIntent.putExtra("USER_ID", userId)
+                            startActivity(mainIntent)
+                            finish()
+                        }
+                        else -> {
+                            Toast.makeText(this, "Vai trò không hợp lệ", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             } else {
