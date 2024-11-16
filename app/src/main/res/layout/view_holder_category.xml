@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutCategory"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp"
+    android:background="@drawable/category_card_background"
+    android:elevation="4dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="16dp">
+
+    <!-- ImageView hình tròn với hình ảnh cover hoàn toàn -->
+    <ImageView
+        android:id="@+id/imgCategory"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/gres_bg"
+        android:clipToOutline="true"
+        android:outlineProvider="background"
+        tools:srcCompat="@drawable/testimage" />
+
+    <!-- TextView ở dưới hình ảnh -->
+    <TextView
+        android:id="@+id/txtCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Món phụ"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:gravity="center" />
+</LinearLayout>

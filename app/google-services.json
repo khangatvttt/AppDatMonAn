@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "99311387284",
+    "project_id": "projectdatmonan",
+    "storage_bucket": "projectdatmonan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99311387284:android:916441ac337d10d958aa81",
+        "android_client_info": {
+          "package_name": "com.example.projectdatmonan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr7-mvIjlxwUz-DABCuK1FqibROkD4k-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
