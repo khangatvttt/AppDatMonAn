@@ -145,6 +145,8 @@ class ThemMonAnActivity : AppCompatActivity() {
                                     loadingDialog.setConfirmClickListener { dialog ->
                                         dialog.dismissWithAnimation()
                                     }
+                                    super.finish()
+
                                 }
                                 else {
                                     loadingDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE)
@@ -153,7 +155,10 @@ class ThemMonAnActivity : AppCompatActivity() {
                                     loadingDialog.setConfirmText("OK")
                                     loadingDialog.setConfirmClickListener { failDialog ->
                                         failDialog.dismissWithAnimation()
+                                        super.finish()
+
                                     }
+
                                 }
                             }
                             sDialog.dismiss()
@@ -199,6 +204,7 @@ class ThemMonAnActivity : AppCompatActivity() {
                                             loadingDialog.setConfirmClickListener { dialog ->
                                                 dialog.dismissWithAnimation()
                                             }
+                                            super.finish()
                                         }
                                         else {
                                             loadingDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE)
@@ -208,6 +214,7 @@ class ThemMonAnActivity : AppCompatActivity() {
                                             loadingDialog.setConfirmClickListener { failDialog ->
                                                 failDialog.dismissWithAnimation()
                                             }
+                                            super.finish()
                                         }
                                     }
                                 }

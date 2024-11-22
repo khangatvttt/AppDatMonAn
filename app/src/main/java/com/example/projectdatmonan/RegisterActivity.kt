@@ -187,7 +187,7 @@ class RegisterActivity : Activity() {
                     } else {
                         Toast.makeText(this@RegisterActivity, "Thêm người dùng thất bại", Toast.LENGTH_SHORT).show()
                     }
-                    null
+
                 }
             }
         }
