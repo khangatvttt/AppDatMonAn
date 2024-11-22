@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#f9f9f9">
+    android:background="#FFFFFF">
 
     <!-- Bộ lọc theo ngày -->
     <LinearLayout
@@ -13,25 +13,30 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="12dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="12dp"
+        android:background="#F1F1F1"
+        android:elevation="2dp"
+        android:clipToPadding="false"
+        android:radius="8dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lọc theo ngày: "
             android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_marginEnd="16dp"/>
+            android:textColor="#333333"
+            android:layout_marginEnd="12dp" />
 
         <Button
             android:id="@+id/btnDateFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chọn ngày"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/colorRed"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="12dp"/>
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FF5722"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="8dp"
+            android:elevation="4dp" />
     </LinearLayout>
 
     <!-- TextView hiển thị ngày đã chọn -->
@@ -41,9 +46,9 @@
         android:layout_height="wrap_content"
         android:text="Ngày đã chọn: "
         android:textSize="14sp"
-        android:textColor="@color/black"
+        android:textColor="#666666"
         android:layout_marginBottom="16dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <!-- Bộ lọc theo giá -->
     <LinearLayout
@@ -52,15 +57,19 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="12dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:background="#F1F1F1"
+        android:elevation="2dp"
+        android:clipToPadding="false"
+        android:radius="8dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lọc theo giá: "
             android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_marginEnd="16dp"/>
+            android:textColor="#333333"
+            android:layout_marginEnd="12dp" />
 
         <EditText
             android:id="@+id/etMinPrice"
@@ -69,7 +78,8 @@
             android:hint="Giá tối thiểu"
             android:inputType="number"
             android:layout_weight="1"
-            android:paddingHorizontal="10dp"/>
+            android:paddingHorizontal="12dp"
+            android:backgroundTint="#DDDDDD" />
 
         <EditText
             android:id="@+id/etMaxPrice"
@@ -78,8 +88,9 @@
             android:hint="Giá tối đa"
             android:inputType="number"
             android:layout_weight="1"
-            android:paddingHorizontal="10dp"
-            android:layout_marginStart="16dp"/>
+            android:paddingHorizontal="12dp"
+            android:layout_marginStart="12dp"
+            android:backgroundTint="#DDDDDD" />
     </LinearLayout>
 
     <!-- Nút lọc -->
@@ -88,11 +99,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Lọc"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@color/colorRed"
-        android:paddingHorizontal="24dp"
-        android:paddingVertical="12dp"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#FF5722"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:elevation="4dp"
+        android:layout_marginBottom="16dp" />
 
     <!-- RecyclerView hiển thị danh sách đơn đặt hàng -->
     <androidx.recyclerview.widget.RecyclerView
@@ -102,5 +114,5 @@
         android:layout_weight="1"
         android:paddingTop="16dp"
         android:clipToPadding="false"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
 </LinearLayout>
