@@ -121,7 +121,10 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
 
 
         // Set up RecyclerView for additional images
-        imagesAdapter = ImagesAdapter(hinhAnhList)
+        imagesAdapter = ImagesAdapter(hinhAnhList) { imageUrl ->
+            // Hiển thị dialog phóng to hình ảnh
+            showImageDialog(imageUrl)
+        }
         rvImages.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvImages.adapter = imagesAdapter
 
@@ -132,6 +135,17 @@ class   ChiTietMonAnActivity : AppCompatActivity() {
                 2 -> sapXepTheoSoSaoGiamDan()
             }
         }
+    }
+    private fun showImageDialog(imageUrl: String) {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.dialog_zoom_image, null)
+        val imageView = view.findViewById<ImageView>(R.id.zoomed_image)
+
+        // Load ảnh vào ImageView
+        Glide.with(this).load(imageUrl).into(imageView)
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
 

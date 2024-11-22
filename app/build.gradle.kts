@@ -76,5 +76,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     implementation("com.google.android.gms:play-services-tasks:18.0.2")
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
 
 }
