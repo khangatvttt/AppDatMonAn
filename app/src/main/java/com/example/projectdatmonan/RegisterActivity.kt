@@ -92,10 +92,20 @@ class RegisterActivity : Activity() {
             if (TextUtils.isEmpty(password)) {
                 passwordErrorText.text = "Vui lòng nhập mật khẩu"
                 isValid = false
-            } else if (password.length < 6) {
-                passwordErrorText.text = "Mật khẩu phải có ít nhất 6 ký tự"
+            } else if (password.length < 8) {
+                passwordErrorText.text = "Mật khẩu phải có ít nhất 8 ký tự"
+                isValid = false
+            } else if (!password.matches(Regex(".*[A-Z].*"))) {
+                passwordErrorText.text = "Mật khẩu phải chứa ít nhất một chữ cái viết hoa"
+                isValid = false
+            } else if (!password.matches(Regex(".*[a-z].*"))) {
+                passwordErrorText.text = "Mật khẩu phải chứa ít nhất một chữ cái viết thường"
+                isValid = false
+            } else if (!password.matches(Regex(".*[!@#\$%^&*(),.?\":{}|<>].*"))) {
+                passwordErrorText.text = "Mật khẩu phải chứa ít nhất một ký tự đặc biệt"
                 isValid = false
             }
+
             if (TextUtils.isEmpty(address)) {
                 addressErrorText.text = "Vui lòng nhập địa chỉ"
                 isValid = false
@@ -167,7 +177,7 @@ class RegisterActivity : Activity() {
 
                 // Tạo đối tượng NguoiDung
                 val nguoiDung = NguoiDung().apply {
-                    avatarUrl = "avartamacdinh.jpg"
+                    avatarUrl = "https://firebasestorage.googleapis.com/v0/b/projectdatmonan.appspot.com/o/avatars%2F-OC2Gz6xGa8gbnAOnwrQ.jpg?alt=media&token=027b1b98-e348-46b4-8489-19b3ce7f2192"
                     email = it.email.toString()
                     hoTen = fullNameEditText.text.toString().trim()
                     sdt = phoneEditText.text.toString().trim()
@@ -187,7 +197,7 @@ class RegisterActivity : Activity() {
                     } else {
                         Toast.makeText(this@RegisterActivity, "Thêm người dùng thất bại", Toast.LENGTH_SHORT).show()
                     }
-                    null
+
                 }
             }
         }

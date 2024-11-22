@@ -1,89 +1,101 @@
-    <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="16dp"
+    android:background="#FAFAFA">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="8dp">
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#FFFFFF">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Mã đơn hàng -->
+        <TextView
+            android:id="@+id/tvOrderID"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:text="Mã đơn hàng: 1671546087813"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1E88E5" />
 
-            <TextView
-                android:id="@+id/tvOrderID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mã đơn hàng: 1671546087813"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black" />
+        <!-- Họ tên khách hàng -->
+        <TextView
+            android:id="@+id/tvCustomerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Họ tên: Tran van hung"
+            android:textSize="16sp"
+            android:textColor="#424242"
+            android:layout_marginTop="8dp" />
 
-            <TextView
-                android:id="@+id/tvCustomerName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Họ tên: Tran van hung"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
+        <!-- Số điện thoại -->
+        <TextView
+            android:id="@+id/tvPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại: 06835986538"
+            android:textSize="16sp"
+            android:textColor="#424242"
+            android:layout_marginTop="4dp" />
 
-            <TextView
-                android:id="@+id/tvPhoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Số điện thoại: 06835986538"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
+        <!-- Địa chỉ -->
+        <TextView
+            android:id="@+id/tvOrderAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ nhận: Hoàn Kiếm, Hà Nội"
+            android:textSize="16sp"
+            android:textColor="#424242"
+            android:layout_marginTop="4dp" />
 
-            <TextView
-                android:id="@+id/tvOrderAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Địa chỉ nhận: Hoàn Kiếm, Hà Nội"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
+        <!-- Thực đơn -->
+        <TextView
+            android:id="@+id/tvOrderItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thực đơn:\n- Gà rang muối (76 000 VNĐ) - Số lượng: 3\n- Sườn xào chua ngọt (90 000 VNĐ) - Số lượng: 1"
+            android:textSize="16sp"
+            android:textColor="#424242"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="4dp" />
 
-            <TextView
-                android:id="@+id/tvOrderItems"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thực đơn:\n- Gà rang muối (76 000 VNĐ) - Số lượng: 3\n- Sườn xào chua ngọt (90 000 VNĐ) - Số lượng: 1"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="8dp" />
+        <!-- Ngày đặt -->
+        <TextView
+            android:id="@+id/tvOrderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày đặt: 20-12-2022, 09:21 PM"
+            android:textSize="16sp"
+            android:textColor="#424242"
+            android:layout_marginTop="8dp" />
 
-            <TextView
-                android:id="@+id/tvOrderDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ngày đặt: 20-12-2022, 09:21 PM"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
+        <!-- Tổng tiền -->
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng tiền: 318 000 VNĐ"
+            android:textSize="18sp"
+            android:textColor="#D32F2F"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp" />
 
-            <TextView
-                android:id="@+id/tvTotalPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tổng tiền: 318 000 VNĐ"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
+        <!-- Phương thức thanh toán -->
+        <TextView
+            android:id="@+id/tvPaymentMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thanh toán: Tiền mặt"
+            android:textSize="16sp"
+            android:textColor="#424242"
+            android:layout_marginTop="4dp" />
 
-            <TextView
-                android:id="@+id/tvPaymentMethod"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thanh toán: Tiền mặt"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="4dp" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

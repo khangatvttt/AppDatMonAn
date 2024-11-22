@@ -36,9 +36,9 @@ class CRUD_MonAn {
     }
 
     fun addMonAn(monAn: MonAn, onComplete: (Boolean) -> Unit) {
-        val newUserId = database.child("MonAn").push().key
+        val newUserId = database.push().key
         if (newUserId != null) {
-            database.child("MonAn").child(newUserId).setValue(monAn)
+            database.child(newUserId).setValue(monAn)
                 .addOnSuccessListener {
                     onComplete(true)
                 }
